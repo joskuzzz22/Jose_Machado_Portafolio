@@ -24,3 +24,9 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# unrelated tooling that happens to live in this folder
+install.ps1
+
+# design source exports
+*.zip
