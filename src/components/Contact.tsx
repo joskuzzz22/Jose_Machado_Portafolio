@@ -1,88 +1,111 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/lib/language";
-import Reveal from "./Reveal";
+import { links } from "@/lib/content";
+import { Container, SectionLabel, cn } from "./ui";
+
+/** Clipboard API first; a hidden textarea covers insecure or older contexts. */
+async function copyText(text: string) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    const ok = document.execCommand("copy");
+    area.remove();
+    return ok;
+  }
+}
+
+const OUTLINE_LINK =
+  "flex h-12 items-center border border-linestrong px-3.5 text-[14px] font-semibold transition-colors duration-[180ms] hover:border-ink active:bg-line md:h-11 md:px-4";
 
 export default function Contact() {
   const { t } = useLanguage();
-  const [num, ...rest] = t.contact.label.split(" — ");
+  const [copied, setCopied] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const copyEmail = async () => {
+    if (!(await copyText(links.email))) return;
+    setCopied(true);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setCopied(false), 2400);
+  };
+
+  const copyButton = cn(
+    "border border-ink font-semibold transition-colors duration-[180ms]",
+    copied ? "bg-ink text-white" : "bg-white text-ink hover:bg-surface active:bg-line",
+  );
 
   return (
-    <section
-      id="contact"
-      className="hairline flex min-h-[90svh] scroll-mt-[60px] items-center py-[130px]"
-    >
-      <div className="mx-auto flex w-full max-w-[1040px] flex-col items-center px-6 text-center">
-        <Reveal>
-          <p className="flex items-center justify-center gap-3 text-[0.85rem] font-semibold">
-            <span className="text-faint">{num}</span>
-            <span className="text-muted">{rest.join(" — ")}</span>
-          </p>
-        </Reveal>
+    <section id="contacto">
+      <Container className="pt-14 pb-10 md:pt-20 md:pb-20 lg:pt-28 lg:pb-24">
+        <div className="border-t-2 border-ink pt-3 lg:grid lg:grid-cols-12 lg:gap-x-6 lg:pt-5">
+          <SectionLabel num="07" label={t.contact.label} className="lg:col-span-3" />
 
-        <Reveal delay={0.08}>
-          <h2 className="type-display mx-auto mt-7 max-w-[820px] text-[clamp(2.5rem,6vw,4.6rem)] leading-[1.06]">
-            {t.contact.title1}{" "}
-            <em className="not-italic text-muted">{t.contact.titleAccent}</em>.
-          </h2>
-        </Reveal>
+          <div data-reveal className="lg:col-span-9">
+            <h2 className="mt-3 text-[32px] leading-[1.08] font-bold tracking-[-0.03em] text-balance md:text-[44px] lg:mt-0 lg:text-[60px] lg:leading-[1.04] lg:tracking-[-0.035em]">
+              {t.contact.title}
+            </h2>
+            <p className="mt-5 hidden max-w-[600px] text-[17px] leading-[1.6] text-body md:block">
+              {t.contact.sub}
+            </p>
 
-        <Reveal delay={0.16}>
-          <p className="mx-auto mt-7 max-w-[620px] text-[1.02rem] leading-[1.7] text-muted">
-            {t.contact.sub}
-          </p>
-        </Reveal>
+            <div className="mt-5 md:mt-9 md:flex md:items-center md:justify-between md:gap-6 md:border-y md:border-linestrong md:py-5">
+              <a
+                href={`mailto:${links.email}`}
+                className="block text-[20px] font-semibold hover:underline md:text-[28px] md:tracking-[-0.02em] lg:text-[32px]"
+              >
+                {links.email}
+              </a>
+              <button
+                type="button"
+                onClick={copyEmail}
+                className={cn(copyButton, "hidden h-11 shrink-0 items-center gap-2 px-[18px] text-[14px] md:flex")}
+              >
+                {copied ? t.ui.copied : t.ui.copy}
+              </button>
+            </div>
+            <p
+              role="status"
+              aria-live="polite"
+              className="sr-only md:not-sr-only md:mt-2 md:min-h-5 md:text-[13px] md:text-body"
+            >
+              {copied ? t.ui.copiedStatus : ""}
+            </p>
 
-        <Reveal delay={0.24}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3.5">
-            <a
-              href="mailto:joskuzzz22@gmail.com"
-              className="inline-flex items-center gap-2.5 rounded-full bg-ink px-7 py-3.5 text-[0.95rem] font-medium text-white transition-all hover:opacity-85 active:scale-[0.98]"
-            >
-              {t.contact.emailCta}
-            </a>
-            <a
-              href="https://www.linkedin.com/in/jose--machado/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2.5 rounded-full border border-faint px-[26px] py-[13px] text-[0.95rem] font-medium text-ink transition-all hover:border-ink hover:bg-black/[0.03] active:scale-[0.98]"
-            >
-              {t.contact.linkedinCta}
-              <span className="transition-transform group-hover:translate-x-0.5">
-                →
-              </span>
-            </a>
-            <a
-              href="https://github.com/joskuzzz22"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2.5 rounded-full border border-faint px-[26px] py-[13px] text-[0.95rem] font-medium text-ink transition-all hover:border-ink hover:bg-black/[0.03] active:scale-[0.98]"
-            >
-              {t.contact.githubCta}
-              <span className="transition-transform group-hover:translate-x-0.5">
-                →
-              </span>
-            </a>
-            <a
-              href="/Jose-Machado-CV.pdf"
-              download="Jose-Machado-CV.pdf"
-              className="inline-flex items-center gap-2.5 rounded-full border border-faint px-[26px] py-[13px] text-[0.95rem] font-medium text-ink transition-all hover:border-ink hover:bg-black/[0.03] active:scale-[0.98]"
-            >
-              {t.hero.cvCta} ↓
-            </a>
+            <div className="mt-3 grid grid-cols-2 gap-2 md:mt-4 md:flex md:flex-wrap">
+              <button
+                type="button"
+                onClick={copyEmail}
+                className={cn(copyButton, "col-span-2 h-12 px-4 text-left text-[15px] md:hidden")}
+              >
+                {copied ? t.ui.copied : t.ui.copy}
+              </button>
+              <a href={links.linkedin} target="_blank" rel="noopener noreferrer" className={OUTLINE_LINK}>
+                LinkedIn ↗
+              </a>
+              <a href={links.github} target="_blank" rel="noopener noreferrer" className={OUTLINE_LINK}>
+                GitHub ↗
+              </a>
+              <a href={links.cv} download={links.cvFile} className={cn(OUTLINE_LINK, "hidden md:flex")}>
+                {t.hero.cv} ↓
+              </a>
+            </div>
+
+            <p className="mt-6 hidden text-[14px] text-muted md:block">{t.contact.avail}</p>
           </div>
-        </Reveal>
-
-        <Reveal delay={0.32}>
-          <p className="mt-11 inline-flex items-center gap-2.5 rounded-full border border-line px-5 py-2.5 text-[0.75rem] font-medium text-muted">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34c759] opacity-50" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#34c759]" />
-            </span>
-            {t.contact.availability}
-          </p>
-        </Reveal>
-      </div>
+        </div>
+      </Container>
     </section>
   );
 }

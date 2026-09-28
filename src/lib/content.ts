@@ -1,887 +1,1257 @@
 export type Lang = "en" | "es";
 
-export interface Project {
-  index: string;
-  title: string;
-  role: string;
-  description: string;
-  metric: string;
-  metricLabel: string;
-  tags: string[];
-  featured?: boolean;
-  link?: string;
+export type SectionId =
+  | "inicio"
+  | "productos"
+  | "perfil"
+  | "experiencia"
+  | "capacidades"
+  | "investigacion"
+  | "formacion"
+  | "contacto";
+
+/** Contact points and files — identical in both languages. */
+export const links = {
+  email: "joskuzzz22@gmail.com",
+  linkedin: "https://www.linkedin.com/in/jose--machado/",
+  github: "https://github.com/joskuzzz22",
+  cv: "/Jose-Machado-CV.pdf",
+  cvFile: "Jose-Machado-CV.pdf",
+} as const;
+
+/** Fictional data for the Case 03 heatmap (levels 0–3). Illustrative only. */
+export const heatmap = {
+  people: ["P1", "P2", "P3", "P4", "P5", "P6"],
+  rows: [
+    { skill: "SuccessFactors EC Core", levels: [3, 2, 2, 1, 0, 2] },
+    { skill: "SAP Activate", levels: [2, 3, 1, 2, 1, 0] },
+    { skill: "Apps Script", levels: [1, 0, 3, 2, 2, 1] },
+    { skill: "Python", levels: [0, 1, 2, 3, 0, 1] },
+    { skill: "Tricentis Tosca", levels: [0, 0, 0, 3, 0, 0] },
+  ],
+} as const;
+
+export interface LabeledValue {
+  label: string;
+  value: string;
 }
 
-export interface ExperienceRole {
+export interface Step {
+  n: string;
+  title: string;
+  text: string;
+}
+
+export interface TextLink {
+  label: string;
+  href: string;
+}
+
+export interface WorkspaceVisual {
+  kind: "workspace";
+  manual: string;
+  manualDesc: string;
+  auto: string;
+  autoDesc: string;
+  run: string;
+  bar: string;
+  saved: LabeledValue;
+  note: string;
+}
+
+export interface McpVisual {
+  kind: "mcp";
+  /** Assistant → MCP server → SAP; the middle node is the product. */
+  nodes: { title: string; sub: string }[];
+  stats: LabeledValue[];
+  note: string;
+}
+
+export interface HeatmapVisual {
+  kind: "heatmap";
+  title: string;
+  tag: string;
+  aria: string;
+  legend: string;
+  spof: string;
+  note: string;
+}
+
+export type CaseVisual = WorkspaceVisual | McpVisual | HeatmapVisual;
+
+export interface CaseStudy {
+  slug: string;
+  n: string;
+  title: string;
+  roleTag: string;
+  explainer?: string;
+  rows: LabeledValue[];
+  /** Condensed rows for the mobile home page (Case 01 only). */
+  rowsShort?: LabeledValue[];
+  visual: CaseVisual;
+  detail: {
+    kicker: string;
+    lede: string;
+    meta: LabeledValue[];
+    sections: { title: string; text: string }[];
+    metrics: LabeledValue[];
+  };
+}
+
+export interface Role {
   title: string;
   period: string;
+  tag: string;
+  summary: string;
   bullets: string[];
+  links: TextLink[];
 }
 
-export interface ExperienceEntry {
+export interface Venture {
   company: string;
-  location: string;
-  kind: string;
-  logo?: string;
-  monogram?: string;
-  roles: ExperienceRole[];
+  role: string;
+  period: string;
+  description: string;
 }
 
-export interface SkillGroup {
+export interface CapabilityGroup {
   title: string;
-  items: string[];
+  description: string;
+  tools: string;
+  used: string;
+  href: string;
 }
 
-export interface SkillKey {
+export interface TechKey {
   k: string;
   label: string;
   blurb: string;
-  tone?: "accent" | "mid";
 }
 
-export interface Certification {
+export type ResearchStatus = "done" | "dev" | "prog";
+
+export interface ResearchItem {
+  code: string;
+  status: ResearchStatus;
+  type: string;
+  title: string;
+  description: string;
+  projection?: { label: string; rows: LabeledValue[]; note: string };
+  related?: { text: string; linkLabel: string; href: string };
+}
+
+export interface School {
+  school: string;
+  logo: string;
+  period: string;
+  program: string;
+  detail: string;
+  honors: string;
+  location: string;
+}
+
+export interface Credential {
   name: string;
   issuer: string;
   year: string;
 }
 
-export interface SchoolEntry {
-  school: string;
-  program: string;
-  detail: string;
-  period: string;
-  location: string;
-  logo?: string;
-}
-
 export interface Content {
-  nav: {
-    about: string;
-    experience: string;
-    projects: string;
-    research: string;
-    skills: string;
-    education: string;
-    certifications: string;
-    contact: string;
+  ui: {
     homeAria: string;
-    menuAria: string;
+    navAria: string;
+    langAria: string;
+    footAria: string;
+    menu: string;
+    close: string;
+    menuLabel: string;
+    myRole: string;
+    more: string;
+    copy: string;
+    copied: string;
+    copiedStatus: string;
   };
+  nav: { id: SectionId; label: string }[];
   hero: {
-    eyebrow: string;
-    headline1: string;
-    headlineAccent: string;
-    headline2: string;
+    name: string;
+    fullName: string;
+    role: string;
+    title: string;
     sub: string;
-    ctaPrimary: string;
-    ctaSecondary: string;
-    cvCta: string;
-    scroll: string;
-    stats: { value: string; label: string }[];
+    cta1: string;
+    cta2: string;
+    cv: string;
+    loc: string;
+    avail: string;
+    alt: string;
+    official: string;
   };
-  about: {
+  impact: {
+    label: string;
+    note: string;
+    items: { value: string; label: string; caption: string; href: string }[];
+  };
+  products: { label: string; title: string; intro: string };
+  pao: {
+    kicker: string;
+    title: string;
+    abbr: string;
+    role: string;
+    body: string;
+    steps: Step[];
+    stats: { value: string; text: string; short: string }[];
+  };
+  cases: CaseStudy[];
+  others: {
+    title: string;
+    ownership: string;
+    items: { n: string; title: string; role: string; description: string; tech: string }[];
+  };
+  profile: {
     label: string;
     title: string;
     paragraphs: string[];
-    facts: { label: string; value: string }[];
+    facts: LabeledValue[];
+    workTitle: string;
+    steps: Step[];
   };
   experience: {
     label: string;
     title: string;
-    entries: ExperienceEntry[];
+    company: string;
+    kind: string;
+    logo: string;
+    roles: Role[];
+    venturesTitle: string;
+    ventures: Venture[];
   };
-  projects: {
+  capabilities: {
     label: string;
     title: string;
-    intro: string;
-    codeCta: string;
-    items: Project[];
+    usedLabel: string;
+    groups: CapabilityGroup[];
+    keyboard: { title: string; hint: string; idle: string; keys: TechKey[] };
   };
   research: {
     label: string;
     title: string;
     intro: string;
-    cards: {
-      code: string;
-      status: string;
-      title: string;
-      description: string;
-      tags: string[];
-      link?: string;
-    }[];
-  };
-  skills: {
-    label: string;
-    title: string;
-    groups: SkillGroup[];
-    keyboard: {
-      hint: string;
-      idle: string;
-      keys: SkillKey[];
-    };
-  };
-  certifications: {
-    label: string;
-    title: string;
-    certs: Certification[];
-    trainingTitle: string;
-    training: Certification[];
+    status: Record<ResearchStatus, string>;
+    items: ResearchItem[];
   };
   education: {
     label: string;
     title: string;
-    schools: SchoolEntry[];
+    eduTitle: string;
+    certTitle: string;
+    trainTitle: string;
+    schools: School[];
+    certs: Credential[];
+    training: Credential[];
   };
-  contact: {
-    label: string;
-    title1: string;
-    titleAccent: string;
-    sub: string;
-    emailCta: string;
-    linkedinCta: string;
-    githubCta: string;
-    availability: string;
-  };
-  footer: {
-    rights: string;
-    built: string;
-  };
+  contact: { label: string; title: string; sub: string; avail: string };
+  footer: { rights: string; links: TextLink[] };
+  detail: { back: string };
 }
+
+const SLUGS = {
+  workspace: "smartsheet-workspace-configuration",
+  mcp: "mcp-server-sap-successfactors",
+  skills: "skills-analytics-system",
+} as const;
+
+const PERU_SMB_REPO = "https://github.com/joskuzzz22/Peru-SMB-Agent-";
 
 export const content: Record<Lang, Content> = {
   en: {
-    nav: {
-      about: "About",
-      experience: "Experience",
-      projects: "Products",
-      research: "Research",
-      skills: "Skills",
-      education: "Education",
-      certifications: "Certifications",
-      contact: "Contact",
+    ui: {
       homeAria: "José Machado — home",
-      menuAria: "Toggle menu",
+      navAria: "Main navigation",
+      langAria: "Language",
+      footAria: "Footer links",
+      menu: "Open menu",
+      close: "Close menu",
+      menuLabel: "Menu",
+      myRole: "My role",
+      more: "View full case",
+      copy: "Copy email",
+      copied: "✓ Copied",
+      copiedStatus: "Email copied to clipboard.",
     },
+    nav: [
+      { id: "productos", label: "Products" },
+      { id: "perfil", label: "Profile" },
+      { id: "experiencia", label: "Experience" },
+      { id: "investigacion", label: "Research" },
+      { id: "contacto", label: "Contact" },
+    ],
     hero: {
-      eyebrow: "José Leonardo Machado Tabraj — AI Solutions Engineer · Lima, Perú",
-      headline1: "I build AI-powered products that turn",
-      headlineAccent: "manual operations",
-      headline2: "into measurable outcomes.",
-      sub: "AI Solutions Engineer & Digital Transformation Product Owner. Founder of the Process Automation Office at Veritas Prime (SAP Gold Partner) — shipping production products at the intersection of SAP, Google Cloud and large language models.",
-      ctaPrimary: "Get in touch",
-      ctaSecondary: "View products",
-      cvCta: "Download CV",
-      scroll: "Scroll",
-      stats: [
-        { value: "7+", label: "Products in production" },
-        { value: "100%", label: "Adoption — embedded in company methodology" },
-        { value: "8 · 24", label: "MCP tools · passing tests" },
-        { value: "6h", label: "Saved weekly, per user" },
+      name: "José Machado",
+      fullName: "José Leonardo Machado Tabraj",
+      role: "AI Solutions Engineer & Digital Transformation Product Owner",
+      title: "I connect business, SAP and AI to build products that work.",
+      sub: "AI Solutions Engineer and Product Owner. I founded the Process Automation Office at Veritas Prime, where I build and lead solutions that automate enterprise operations.",
+      cta1: "View products",
+      cta2: "Let’s talk",
+      cv: "Download CV",
+      loc: "Lima, Perú · UTC−5",
+      avail: "Open to remote or hybrid roles",
+      alt: "Portrait of José Leonardo Machado Tabraj",
+      official: "Current title: Process Reengineering Associate Analyst · Veritas Prime",
+    },
+    impact: {
+      label: "Impact summary",
+      note: "Reported results from Veritas Prime internal products.",
+      items: [
+        {
+          value: "7+",
+          label: "products in production",
+          caption: "Process Automation Office · AUTO-006 to AUTO-013",
+          href: "#pao",
+        },
+        {
+          value: "≈6 h",
+          label: "saved per user, per week",
+          caption: "Automation MVPs built from user research",
+          href: "#experiencia",
+        },
+        {
+          value: "≈2 h",
+          label: "saved per implementation",
+          caption: "Case 01 · Smartsheet Workspace Configuration",
+          href: "#caso-01",
+        },
       ],
     },
-    about: {
-      label: "01 — About",
-      title: "Business fluency. SAP depth. AI execution.",
+    products: {
+      label: "Products",
+      title: "Products in production, built from the operation up.",
+      intro:
+        "Each product started as a recurring manual task in delivery teams and ended as adopted tooling.",
+    },
+    pao: {
+      kicker: "Initiative · 2025 — present",
+      title: "Process Automation Office",
+      abbr: "PAO",
+      role: "Founder & Product Lead",
+      body: "I created an internal product function at Veritas Prime that defines how automations are found, prioritized, documented and adopted. Its AUTO-000 standard is now the LATAM-wide norm for documenting, onboarding and handing over internal automations.",
+      steps: [
+        { n: "01", title: "Discovery", text: "User research to find recurring manual work." },
+        { n: "02", title: "Prioritization", text: "An in-house framework for deciding what to automate first." },
+        { n: "03", title: "Documentation", text: "The AUTO-000 standard for documentation, onboarding and handover." },
+        { n: "04", title: "Adoption", text: "Two AI literacy programs and the Corporate AI Flight Manual." },
+      ],
+      stats: [
+        {
+          value: "7+",
+          text: "products in production for LATAM delivery teams (AUTO-006 to AUTO-013).",
+          short: "products in production",
+        },
+        {
+          value: "100%",
+          text: "adoption in two processes embedded in the corporate delivery methodology: workspace provisioning (Case 01) and Zoom-transcript processing.",
+          short: "adoption in 2 corporate methodology processes",
+        },
+      ],
+    },
+    cases: [
+      {
+        slug: SLUGS.workspace,
+        n: "Case 01",
+        title: "Smartsheet Workspace Configuration",
+        roleTag: "End-to-end owner",
+        rows: [
+          { label: "Problem", value: "Setting up the Smartsheet workspace for each client implementation was a manual 17-step process." },
+          { label: "Users & context", value: "Veritas Prime Project Managers and consultants on client implementations." },
+          { label: "My contribution", value: "End-to-end delivery owner: requirements, build, validation and adoption." },
+          { label: "Solution", value: "A 17-step automated setup with a Google Apps Script backend, an HTML interface and the Smartsheet API." },
+          { label: "Result", value: "≈2 billable hours saved per implementation. 100% adoption: a mandatory step of every implementation in the corporate methodology." },
+          { label: "Technology", value: "Google Apps Script · HTML · Smartsheet API" },
+        ],
+        rowsShort: [
+          { label: "My contribution", value: "End-to-end delivery owner." },
+          { label: "Result", value: "100% adoption as a mandatory step of every implementation." },
+          { label: "Technology", value: "Google Apps Script · HTML · Smartsheet API" },
+        ],
+        visual: {
+          kind: "workspace",
+          manual: "Manual",
+          manualDesc: "17 steps by hand, every implementation",
+          auto: "Automated",
+          autoDesc: "One run; the script completes all 17 steps",
+          run: "Configure workspace",
+          bar: "Apps Script · 1–17",
+          saved: { value: "≈2 h", label: "saved per implementation" },
+          note: "Diagram based on the product description. Step durations are not represented.",
+        },
+        detail: {
+          kicker: "Delivery automation",
+          lede: "Automated Smartsheet workspace setup for every client implementation, embedded in the corporate delivery methodology.",
+          meta: [
+            { label: "My role", value: "End-to-end owner" },
+            { label: "Period", value: "Sept 2025 — Feb 2026" },
+            { label: "Company", value: "Veritas Prime" },
+            { label: "Technology", value: "Apps Script · HTML · Smartsheet API" },
+          ],
+          sections: [
+            { title: "Context", text: "Veritas Prime, an SAP Gold Partner for LATAM and the Caribbean, runs client implementation delivery in Smartsheet." },
+            { title: "Problem", text: "Every implementation needed a workspace configured by hand in 17 steps." },
+            { title: "My role", text: "End-to-end delivery owner, working with Project Managers, consultants and clients." },
+            { title: "Solution", text: "A Google Apps Script backend and HTML interface that run all 17 steps through the Smartsheet API." },
+            { title: "Validation & adoption", text: "Embedded in the corporate delivery methodology as a mandatory step of every client implementation." },
+            { title: "Results", text: "≈2 billable hours saved per implementation and 100% adoption in the process." },
+          ],
+          metrics: [
+            { value: "17", label: "automated steps" },
+            { value: "≈2 h", label: "saved per implementation" },
+            { value: "100%", label: "adoption in the methodology" },
+          ],
+        },
+      },
+      {
+        slug: SLUGS.mcp,
+        n: "Case 02",
+        title: "MCP Server for SAP SuccessFactors",
+        roleTag: "Product vision & build",
+        explainer:
+          "MCP (Model Context Protocol) is an open standard that lets an AI assistant use tools and data from other systems in a controlled way.",
+        rows: [
+          { label: "Problem", value: "Language models cannot query or act on the SAP SuccessFactors ecosystem on their own." },
+          { label: "Users & context", value: "A Veritas Prime Avengers Initiative product, with the VP Labs engineering team." },
+          { label: "My contribution", value: "Product vision and build. As Functional Lead: functional specs, acceptance criteria and the validation loop." },
+          { label: "Solution", value: "A Python MCP server exposing 8 tools so a language model can work with SAP SuccessFactors through its APIs." },
+          { label: "Result", value: "8 MCP tools and 24 passing tests." },
+          { label: "Technology", value: "Python · MCP · SAP APIs · LLM" },
+        ],
+        visual: {
+          kind: "mcp",
+          nodes: [
+            { title: "AI assistant", sub: "Language model" },
+            { title: "MCP server", sub: "Python · 8 tools" },
+            { title: "SAP SuccessFactors", sub: "SAP APIs" },
+          ],
+          stats: [
+            { value: "8", label: "MCP tools" },
+            { value: "24", label: "passing tests" },
+          ],
+          note: "Conceptual diagram. Includes only components documented in the portfolio.",
+        },
+        detail: {
+          kicker: "Enterprise AI integration",
+          lede: "Connects language models to the SAP SuccessFactors ecosystem, so an AI assistant can query it and act on it in a controlled way.",
+          meta: [
+            { label: "My role", value: "Product vision & build" },
+            { label: "Company", value: "Veritas Prime" },
+            { label: "Technology", value: "Python · MCP · SAP APIs · LLM" },
+          ],
+          sections: [
+            { title: "Context", text: "MCP (Model Context Protocol) is an open standard that lets an AI assistant use tools and data from other systems in a controlled way. This server is a Veritas Prime Avengers Initiative product, built with the VP Labs engineering team." },
+            { title: "Problem", text: "Language models cannot query or act on the SAP SuccessFactors ecosystem on their own." },
+            { title: "My role", text: "Product vision and build. As Functional Lead: functional specs, acceptance criteria and the validation loop." },
+            { title: "Solution", text: "A Python MCP server exposing 8 tools so a language model can work with SAP SuccessFactors through its APIs." },
+            { title: "Results", text: "8 MCP tools and 24 passing tests." },
+          ],
+          // The diagram above already shows 8 tools and 24 tests.
+          metrics: [],
+        },
+      },
+      {
+        slug: SLUGS.skills,
+        n: "Case 03",
+        title: "Skills Analytics System",
+        roleTag: "Migration & dashboard lead",
+        rows: [
+          { label: "Problem", value: "Team competency data lived in Google Sheets, with no view to spot skill gaps or key-person dependencies." },
+          { label: "Users & context", value: "Veritas Prime leadership, for team staffing decisions." },
+          { label: "My contribution", value: "Led the data migration to Smartsheet and the delivery of the dashboards." },
+          { label: "Solution", value: "React dashboards with skill-gap heatmaps and single-point-of-failure (SPOF) analysis: skills that depend on one person." },
+          { label: "Result", value: "Support for executive staffing decisions." },
+          { label: "Technology", value: "React · Smartsheet · Analytics" },
+        ],
+        visual: {
+          kind: "heatmap",
+          title: "Skills heatmap",
+          tag: "Illustrative · fictional data",
+          aria: "Illustrative heatmap with fictional data: five skills by six people; Tricentis Tosca depends on a single person.",
+          legend: "Level 0–3",
+          spof: "one person covers the skill",
+          note: "Conceptual visualization.",
+        },
+        detail: {
+          kicker: "Workforce analytics",
+          lede: "Dashboards that show skill gaps and key-person dependencies across the team, to support leadership staffing decisions.",
+          meta: [
+            { label: "My role", value: "Migration & dashboard lead" },
+            { label: "Company", value: "Veritas Prime" },
+            { label: "Technology", value: "React · Smartsheet · Analytics" },
+          ],
+          sections: [
+            { title: "Context", text: "Built for Veritas Prime leadership, to support team staffing decisions." },
+            { title: "Problem", text: "Team competency data lived in Google Sheets, with no view to spot skill gaps or key-person dependencies." },
+            { title: "My role", text: "Led the data migration to Smartsheet and the delivery of the dashboards." },
+            { title: "Solution", text: "React dashboards with skill-gap heatmaps and single-point-of-failure (SPOF) analysis: skills that depend on one person." },
+            { title: "Results", text: "Support for executive staffing decisions." },
+          ],
+          metrics: [],
+        },
+      },
+    ],
+    others: {
+      title: "Other products",
+      ownership: "Most of this code is owned by Veritas Prime. What can be public is on",
+      items: [
+        {
+          n: "04",
+          title: "Data Toolkit — Avengers Initiative",
+          role: "Functional Lead",
+          description: "Consultant-facing data tooling: a prioritized functional backlog with acceptance criteria, and validation of every engineering release.",
+          tech: "Product ownership · UAT",
+        },
+        {
+          n: "05",
+          title: "Client onboarding automation",
+          role: "Spec & build",
+          description: "Creates Drive folders, DNA workbooks and Google Chat spaces for every new client. Setup went from hours to minutes.",
+          tech: "Apps Script · Drive API · Chat API",
+        },
+        {
+          n: "06",
+          title: "SuccessFactors test automation",
+          role: "Automation engineer",
+          description: "Model-based regression tests in Tricentis Tosca for SAP SuccessFactors configurations.",
+          tech: "Tricentis Tosca · SAP",
+        },
+      ],
+    },
+    profile: {
+      label: "Profile",
+      title: "Business judgment, SAP depth and building with AI.",
       paragraphs: [
-        "I operate at the intersection most companies struggle to bridge: business operations, enterprise SAP, and applied AI. Trained in business — BBA Cum Laude at the University of Arizona, top 5% of my class at UPC — and certified as an SAP SuccessFactors consultant, I made the leap that most analysts never make: I stopped writing requirements and started shipping the products myself.",
-        "At Veritas Prime, an SAP Gold Partner serving LATAM & the Caribbean, that leap earned me a role created specifically around what I had built. Today I own the internal product roadmap for AI-enabled tooling, lead the Process Automation Office I founded, and serve as Functional Lead on three concurrent products — including an MCP server that connects large language models to the SAP SuccessFactors ecosystem.",
-        "I don't hand off specs and hope. I do discovery with real users, write the acceptance criteria, build or co-build the product, run the validation loop, and drive the change management that makes adoption stick — including two corporate AI literacy programs and the company's AI Flight Manual.",
+        "I trained in business—BBA Cum Laude at the University of Arizona and top 5% of my class at UPC—and certified as an SAP SuccessFactors consultant. From there I moved from writing requirements to building the products: I research with users, write the acceptance criteria and build or co-build the solution.",
+        "At Veritas Prime, an SAP Gold Partner for LATAM and the Caribbean, I founded and lead the Process Automation Office and own the internal roadmap for AI-enabled tools. I support adoption through two corporate AI literacy programs and the company’s AI Flight Manual.",
       ],
       facts: [
-        { label: "Location", value: "Lima, Perú — UTC-5, year-round US ET/CT overlap" },
+        { label: "Location", value: "Lima, Perú · UTC−5, no DST" },
         { label: "Languages", value: "Spanish (native) · English (professional)" },
-        { label: "Focus", value: "AI solutions · Product ownership · SAP" },
-        { label: "Currently", value: "Process Reengineering Analyst @ Veritas Prime" },
+        { label: "Current title", value: "Process Reengineering Associate Analyst, Veritas Prime" },
+      ],
+      workTitle: "How I work",
+      steps: [
+        { n: "01", title: "Understand the process", text: "Research with real users." },
+        { n: "02", title: "Prioritize", text: "What to automate first, and why." },
+        { n: "03", title: "Build", text: "Build or co-build with engineering." },
+        { n: "04", title: "Validate", text: "Acceptance criteria and UAT." },
+        { n: "05", title: "Support adoption", text: "AUTO-000 documentation and training." },
       ],
     },
     experience: {
-      label: "02 — Experience",
-      title: "A role invented for what I build.",
-      entries: [
+      label: "Experience",
+      title: "One progression inside Veritas Prime.",
+      company: "Veritas Prime LATAM & Caribe",
+      kind: "SAP Gold Partner · Lima, Perú",
+      logo: "/logos/veritas-prime.png",
+      roles: [
         {
-          company: "Veritas Prime LATAM & Caribe",
-          logo: "/logos/veritas-prime.png",
-          location: "Lima, Perú",
-          kind: "SAP Gold Partner",
-          roles: [
-            {
-              title: "Process Reengineering Associate Analyst",
-              period: "Feb 2026 — Present",
-              bullets: [
-                "Appointed to a newly-created position after prior AI-powered products delivered measurable adoption; own the internal product roadmap for AI-enabled tools across Consulting and AMS delivery operations.",
-                "Founded and lead the Process Automation Office (PAO): defined the discovery process, prioritization framework and AUTO-000 documentation standard; shipped 7+ production products serving LATAM delivery teams.",
-                "Functional Lead across three concurrent products under the Avengers Initiative — Data Toolkit, MCP server for SAP SuccessFactors, and Smartsheet delivery automation — owning functional specs, acceptance criteria and the validation loop with the VP Labs engineering team.",
-                "Drove enablement through 2 corporate AI Literacy programs and the Corporate AI Flight Manual; co-designed security and data-classification guardrails with IT to unlock enterprise adoption.",
-                "Host the PAO automation stack on Google Cloud Platform and harden the Ubuntu environments behind it — remediating findings from IT's recurring internal penetration tests so vulnerabilities are closed before they reach production.",
-              ],
-            },
-            {
-              title: "Prime Associate Project Coordinator",
-              period: "Sept 2025 — Feb 2026",
-              bullets: [
-                "Owned end-to-end delivery of the Smartsheet Workspace Configuration product — a 17-step automated setup saving ~2 billable hours per client implementation.",
-                "Partnered with Project Managers, consultants and clients to gather requirements, validate user stories and prioritize the internal tooling backlog.",
-              ],
-            },
-            {
-              title: "Prime Associate Member",
-              period: "Apr 2025 — Dec 2025",
-              bullets: [
-                "Identified recurring manual pain points through user research; shipped automation MVPs that reclaimed ~6 hours per week, per user.",
-                "Established the AUTO-000 template pattern — adopted LATAM-wide as the standard for documentation, onboarding and handover of internal automations.",
-              ],
-            },
+          title: "Process Reengineering Associate Analyst",
+          period: "Feb 2026 — present",
+          tag: "Newly created role",
+          summary: "Created after earlier AI-powered products delivered measurable adoption.",
+          bullets: [
+            "Own the internal roadmap for AI-enabled tools across Consulting and AMS.",
+            "Founded and lead the Process Automation Office: 7+ products in production.",
+            "Functional Lead on three Avengers Initiative products with the VP Labs team.",
+          ],
+          links: [
+            { label: "PAO", href: "#pao" },
+            { label: "Case 02", href: "#caso-02" },
           ],
         },
         {
-          company: "KeyStock Perú",
-          monogram: "KS",
-          location: "Lima, Perú",
-          kind: "Founder venture",
-          roles: [
-            {
-              title: "Founder & B2B Wholesale Supplier",
-              period: "2024 — Present",
-              bullets: [
-                "Validated an underserved locksmith and auto-shop segment through customer discovery; launched a B2B wholesale line of automotive key shells sourced from Chinese manufacturers (KEYDIY, Xhorse).",
-                "Defined go-to-market strategy — pricing, distribution and brand — and executed landed-cost analysis under Peruvian customs regulations.",
-                "Now runs as a passive operation — no conflict with full-time commitments.",
-              ],
-            },
+          title: "Prime Associate Project Coordinator",
+          period: "Sept 2025 — Feb 2026",
+          tag: "Coordination",
+          summary: "Internal tooling with Project Managers, consultants and clients.",
+          bullets: [
+            "End-to-end delivery of Smartsheet Workspace Configuration.",
+            "Requirements, user-story validation and backlog prioritization.",
           ],
+          links: [{ label: "Case 01", href: "#caso-01" }],
+        },
+        {
+          title: "Prime Associate Member",
+          period: "Apr 2025 — Dec 2025",
+          tag: "Start",
+          summary: "User research to find recurring manual work.",
+          bullets: [
+            "Automation MVPs that reclaimed ≈6 hours per week, per user.",
+            "Created the AUTO-000 pattern, adopted LATAM-wide as the documentation standard.",
+          ],
+          links: [{ label: "PAO", href: "#pao" }],
+        },
+      ],
+      venturesTitle: "Ventures",
+      ventures: [
+        {
+          company: "KeyStock Perú",
+          role: "Founder & B2B wholesale supplier",
+          period: "2024 — present",
+          description: "Validated an underserved locksmith and auto-shop segment, and set pricing, distribution and landed costs. Now runs passively.",
         },
         {
           company: "The Focus Club",
-          monogram: "FC",
-          location: "Lima, Perú",
-          kind: "Apparel brand",
-          roles: [
-            {
-              title: "CEO & Founder",
-              period: "Jun 2022 — Dec 2023",
-              bullets: [
-                "Achieved a 30% operating margin through strategic pricing, SKU curation and inventory management across two seasonal collections.",
-                "Led end-to-end product operations: financial modeling, supplier sourcing and direct-to-consumer sales strategy.",
-              ],
-            },
-          ],
+          role: "CEO & Founder · apparel brand",
+          period: "Jun 2022 — Dec 2023",
+          description: "30% operating margin across two collections, with financial modeling, supplier sourcing and direct sales.",
         },
       ],
     },
-    projects: {
-      label: "03 — Products",
-      title: "Shipped, adopted, in production.",
-      intro:
-        "Not concepts — products running today inside a company that bills by the hour. Every one of them started as a manual pain point and ended as adopted tooling. Most of this code is proprietary to Veritas Prime; what can be public lives on GitHub.",
-      codeCta: "View code on GitHub",
-      items: [
-        {
-          index: "P—01",
-          title: "Process Automation Office (PAO)",
-          role: "Founder & Product Lead",
-          description:
-            "An internal product function built from zero: discovery process, prioritization framework and the AUTO-000 documentation standard — now the LATAM-wide norm for how automations are documented, onboarded and handed over. Products AUTO-006 through AUTO-013 shipped and serving delivery teams; two of them — workspace provisioning and Zoom-transcript processing — are embedded in the corporate delivery methodology with 100% adoption.",
-          metric: "7+",
-          metricLabel: "products in production",
-          tags: ["Product strategy", "Governance", "Change management"],
-          featured: true,
-        },
-        {
-          index: "P—02",
-          title: "MCP Server for SAP SuccessFactors",
-          role: "Product vision & build",
-          description:
-            "A Python-based Model Context Protocol server that lets large language models operate against the SAP SuccessFactors ecosystem. Part of the Avengers Initiative portfolio.",
-          metric: "8 · 24",
-          metricLabel: "tools · passing tests",
-          tags: ["Python", "MCP", "SAP APIs", "LLM"],
-        },
-        {
-          index: "P—03",
-          title: "Smartsheet Workspace Configuration",
-          role: "End-to-end owner",
-          description:
-            "A 17-step automated workspace setup — Google Apps Script backend, HTML frontend. 100% adoption: embedded in the corporate delivery methodology as a mandatory step of every client implementation.",
-          metric: "100%",
-          metricLabel: "adoption · −2h billable per client",
-          tags: ["Apps Script", "Smartsheet API", "HTML"],
-        },
-        {
-          index: "P—04",
-          title: "Skills Analytics System",
-          role: "Migration & dashboard lead",
-          description:
-            "Migrated team competency data from Sheets to Smartsheet and delivered React dashboards with single-point-of-failure analysis and skill-gap heatmaps for executive staffing decisions.",
-          metric: "SPOF",
-          metricLabel: "risk analysis for execs",
-          tags: ["React", "Smartsheet", "Analytics"],
-        },
-        {
-          index: "P—05",
-          title: "Data Toolkit — Avengers Initiative",
-          role: "Functional Lead",
-          description:
-            "Consultant-facing data tooling: translated business needs into a prioritized functional backlog with acceptance criteria, and validated engineering deliverables before every release.",
-          metric: "1 of 3",
-          metricLabel: "concurrent products led",
-          tags: ["Product ownership", "Data tooling", "UAT"],
-        },
-        {
-          index: "P—06",
-          title: "Client Onboarding Automation",
-          role: "Spec & build",
-          description:
-            "Auto-provisions Drive folders, DNA workbooks and Google Chat spaces for every new client engagement — onboarding setup cut from hours to minutes.",
-          metric: "h → min",
-          metricLabel: "onboarding setup time",
-          tags: ["Apps Script", "Drive API", "Chat API"],
-        },
-        {
-          index: "P—07",
-          title: "SuccessFactors Test Automation",
-          role: "Automation engineer",
-          description:
-            "Model-based automated regression-test assets in Tricentis Tosca for SAP SuccessFactors configurations — less manual QA, faster release validation on client implementations.",
-          metric: "QA",
-          metricLabel: "manual effort reduced",
-          tags: ["Tricentis Tosca", "SAP", "Test automation"],
-        },
-      ],
-    },
-    research: {
-      label: "04 — Research & Audits",
-      title: "Audit first. Automate second.",
-      intro:
-        "Research and analysis behind the products — process audits, market-entry plans and policy research — because the right automation starts with understanding the real operation.",
-      cards: [
-        {
-          code: "R—01 · Market research & financial model",
-          status: "Completed · 2026",
-          title: "D'FitoLife Soy — Peru → US internationalization plan",
-          description:
-            "End-to-end internationalization plan for a Peruvian supplement built on soy and Andean superfoods, targeting the US Hispanic segment through Amazon FBA: market-selection matrix, bottom-up demand build (SOM), landed-cost and tariff analysis, and a fully traceable financial model — NPV of USD 31,658, IRR of 49.7% and a 2.16-year payback in the conservative scenario, stress-tested against a 15% US tariff.",
-          tags: ["Market research", "Financial modeling", "Amazon FBA", "Foreign trade"],
-        },
-        {
-          code: "R—02 · Research & framework",
-          status: "In development",
-          title: "Perú SMB — Operational audit for consultancies",
-          description:
-            "A process-audit and digital-maturity framework focused on Peruvian SMBs: a methodology for consultancies to assess operations, detect bottlenecks and prioritize automation opportunities before implementing technology. Its first working prototype is public — an AI reasoning agent that pre-qualifies Peruvian property-transfer deeds through an explicit 10-step legal verification chain, grounded with cited sources and fail-safe by design: the agent proposes, the notary decides.",
-          tags: ["Process audit", "Peruvian SMBs", "Agentic AI", "Framework"],
-          link: "https://github.com/joskuzzz22/Peru-SMB-Agent-",
-        },
-        {
-          code: "R—03 · Thesis research",
-          status: "In progress",
-          title: "The EU's CBAM — impact on Peruvian and Andean exports",
-          description:
-            "Research on the European Carbon Border Adjustment Mechanism and the Green Deal: how unilateral EU climate policy reshapes market access for Andean economies, and which carbon-pricing responses are available to Peru and the Andean Community.",
-          tags: ["Climate policy", "CBAM", "Foreign trade", "Andean Community"],
-        },
-      ],
-    },
-    skills: {
-      label: "05 — Skills",
-      title: "One profile, four disciplines.",
+    capabilities: {
+      label: "Capabilities",
+      title: "Four disciplines, applied in real projects.",
+      usedLabel: "Applied in",
       groups: [
         {
-          title: "AI & Automation",
-          items: [
-            "Claude Code",
-            "Model Context Protocol (MCP)",
-            "RAG pipelines",
-            "LLM workflow design",
-            "Enterprise AI adoption frameworks",
-            "NotebookLM",
-          ],
+          title: "AI & automation",
+          description: "I design language-model workflows and connect AI assistants to enterprise systems.",
+          tools: "Claude Code · MCP · RAG pipelines · LLM workflows · NotebookLM",
+          used: "Case 02",
+          href: "#caso-02",
         },
         {
-          title: "Product & Delivery",
-          items: [
-            "Product discovery",
-            "Backlog prioritization",
-            "Roadmap definition",
-            "Stakeholder management",
-            "User research",
-            "MVP scoping",
-            "Change management",
-            "UAT coordination",
-          ],
+          title: "Product & delivery",
+          description: "I find needs, prioritize the backlog and support adoption until the product is used.",
+          tools: "Discovery · Prioritization · Roadmap · MVP · UAT · Change management",
+          used: "PAO",
+          href: "#pao",
         },
         {
           title: "Engineering",
-          items: [
-            "Python",
-            "Google Cloud Platform (GCP)",
-            "Google Apps Script (OAuth, Webhooks)",
-            "Ubuntu — hardening & security guardrails",
-            "React · HTML",
-            "SQL Server",
-            "Power BI",
-            "Smartsheet API",
-            "Tricentis Tosca",
-            "Excel (advanced)",
-          ],
+          description: "I build automations, integrations and dashboards, and run them on Google Cloud.",
+          tools: "Python · Apps Script · React · GCP · SQL Server · Power BI · Smartsheet API · Tosca · Ubuntu",
+          used: "Cases 01 & 03",
+          href: "#caso-01",
         },
         {
           title: "SAP",
-          items: [
-            "SuccessFactors EC Core (certified consultant)",
-            "SAP Activate methodology",
-            "SAP API integration",
-            "S/4HANA MM & WM (expert user)",
-          ],
+          description: "Certified in SuccessFactors EC Core and the SAP Activate methodology.",
+          tools: "SuccessFactors EC Core · SAP Activate · SAP APIs · S/4HANA MM & WM",
+          used: "Case 02",
+          href: "#caso-02",
         },
       ],
       keyboard: {
-        hint: "hint: press a key — or tap a cap",
-        idle: "Waiting for input…",
+        title: "Technology keyboard",
+        hint: "Optional detail. Press a key to see where I’ve used it.",
+        idle: "Select a key.",
         keys: [
-          { k: "C", label: "Claude Code", blurb: "My daily driver — AI pair-engineering behind every product I ship.", tone: "accent" },
-          { k: "M", label: "MCP", blurb: "Built an MCP server for SAP SuccessFactors — 8 tools, 24 passing tests.", tone: "accent" },
-          { k: "S", label: "SuccessFactors", blurb: "Certified EC Core implementation consultant.", tone: "accent" },
-          { k: "P", label: "Python", blurb: "Backbone of my MCP server and automation pipelines." },
-          { k: "R", label: "React", blurb: "Dashboards with SPOF analysis and skill-gap heatmaps.", tone: "mid" },
-          { k: "G", label: "GCP", blurb: "Google Cloud hosts the automation stack — where most PAO products run.", tone: "mid" },
-          { k: "W", label: "Apps Script", blurb: "OAuth, webhooks, Drive/Gmail/Chat/Sheets — automation that ships.", tone: "mid" },
-          { k: "A", label: "SAP Activate", blurb: "Certified project manager in SAP's delivery methodology." },
-          { k: "L", label: "LLM Workflows", blurb: "RAG pipelines and enterprise AI workflow design.", tone: "mid" },
-          { k: "I", label: "SAP APIs", blurb: "Integration across the SuccessFactors ecosystem." },
-          { k: "T", label: "Smartsheet", blurb: "API automation for delivery operations at scale." },
-          { k: "B", label: "Power BI", blurb: "Executive reporting and analytics.", tone: "mid" },
-          { k: "Q", label: "SQL Server", blurb: "Data modeling and queries behind the dashboards." },
+          { k: "C", label: "Claude Code", blurb: "Daily AI pair-engineering tool behind every product I ship." },
+          { k: "M", label: "MCP", blurb: "MCP server for SAP SuccessFactors: 8 tools, 24 passing tests. → Case 02" },
+          { k: "S", label: "Success\u00ADFactors", blurb: "Certified EC Core implementation consultant." },
+          { k: "P", label: "Python", blurb: "Backbone of the MCP server and automation pipelines." },
+          { k: "R", label: "React", blurb: "Skill-gap and SPOF dashboards. → Case 03" },
+          { k: "G", label: "GCP", blurb: "Google Cloud hosts the PAO automation stack." },
+          { k: "W", label: "Apps Script", blurb: "OAuth, webhooks and Google Workspace APIs. → Case 01" },
+          { k: "T", label: "Smartsheet", blurb: "API automation for delivery operations. → Case 01" },
           { k: "K", label: "Tosca", blurb: "Model-based test automation for SAP configurations." },
-          { k: "N", label: "NotebookLM", blurb: "Research and knowledge synthesis for delivery teams." },
-          { k: "O", label: "OAuth", blurb: "Server-to-server auth and webhook integrations.", tone: "mid" },
-          { k: "H", label: "Security", blurb: "Hardened Ubuntu environments and guardrails — built to withstand IT's recurring internal pentests." },
-          { k: "D", label: "Discovery", blurb: "User research that finds the pain worth automating.", tone: "mid" },
-          { k: "U", label: "UAT", blurb: "Validation loops between consultants and engineering." },
-          { k: "E", label: "Enterprise AI", blurb: "Adoption frameworks, literacy programs, security guardrails.", tone: "mid" },
+          { k: "H", label: "Security", blurb: "Ubuntu environments hardened against IT’s internal pentests." },
         ],
       },
     },
-    certifications: {
-      label: "07 — Certifications",
-      title: "SAP, AI and data. Certified.",
-      certs: [
-        { name: "SAP Certified Associate — SuccessFactors EC Core, Implementation Consultant", issuer: "SAP", year: "2025 · recert. 2026" },
-        { name: "SAP Certified Associate — Project Manager, SAP Activate", issuer: "SAP", year: "2025" },
-        { name: "Strategic Transformation with AI", issuer: "Pacífico Business School", year: "2026" },
-        { name: "Cambridge FCE — English (B2 First)", issuer: "Cambridge", year: "2023" },
-      ],
-      trainingTitle: "Recent training",
-      training: [
-        { name: "Claude Code 101 & Claude 101", issuer: "Anthropic", year: "2026" },
-        { name: "Claude Code desde Cero", issuer: "Coding Latam", year: "2026" },
-        { name: "Diplomado en Logística y Operaciones", issuer: "ADEX", year: "2024" },
-        { name: "SAP Logistics MM/WM", issuer: "UNI", year: "2024" },
-        { name: "SQL Server & Power BI Bootcamp", issuer: "Cibertec", year: "2024" },
+    research: {
+      label: "Research",
+      title: "Audit first, automate second.",
+      intro:
+        "Process audits, market-entry plans and policy research: the right automation starts with understanding the real operation.",
+      status: { done: "Completed · 2026", dev: "In development", prog: "In progress" },
+      items: [
+        {
+          code: "R—01",
+          status: "done",
+          type: "Market research & financial model",
+          title: "D’FitoLife Soy — Peru → US internationalization plan",
+          description: "A plan to take a Peruvian soy and Andean-superfood supplement to the US Hispanic segment via Amazon FBA: market selection, bottom-up demand, landed costs and tariffs.",
+          projection: {
+            label: "Projected results · conservative scenario",
+            rows: [
+              { label: "NPV", value: "USD 31,658" },
+              { label: "IRR", value: "49.7%" },
+              { label: "Payback", value: "2.16 years" },
+            ],
+            note: "Projection from a financial model, stress-tested against a 15% US tariff. Not the results of an operating company.",
+          },
+        },
+        {
+          code: "R—02",
+          status: "dev",
+          type: "Research & audit framework",
+          title: "Perú SMB — Operational audit for consultancies",
+          description: "A process-audit and digital-maturity framework for consultancies to assess Peruvian SMB operations and prioritize what to automate before implementing technology.",
+          related: {
+            text: "The framework’s first public prototype: an AI agent that pre-qualifies property-transfer deeds through a 10-step legal verification chain with cited sources. The agent proposes; the notary decides.",
+            linkLabel: "View prototype on GitHub",
+            href: PERU_SMB_REPO,
+          },
+        },
+        {
+          code: "R—03",
+          status: "prog",
+          type: "Thesis research",
+          title: "The EU’s CBAM and Peruvian and Andean exports",
+          description: "CBAM (Carbon Border Adjustment Mechanism) puts a carbon price on certain EU imports. The research looks at how it changes market access for Andean economies and which responses are available to Peru and the Andean Community.",
+        },
       ],
     },
     education: {
-      label: "06 — Education",
-      title: "Two continents, one discipline.",
+      label: "Education",
+      title: "Trained in business, certified in SAP.",
+      eduTitle: "Education",
+      certTitle: "Certifications",
+      trainTitle: "Courses & further training",
       schools: [
         {
           school: "University of Arizona",
           logo: "/logos/arizona.png",
-          program: "Eller College of Management — B.B.A.",
-          detail: "Dual-degree program with UPC · Graduated Cum Laude · GPA 3.55/4.00 · Dean's List with Distinction (Summer 2024) · Dean's List (Spring 2024, Fall 2025)",
           period: "2023 — 2025",
+          program: "Eller College of Management — B.B.A.",
+          detail: "Dual degree with UPC · GPA 3.55/4.00",
+          honors: "Cum Laude · Dean’s List with Distinction (Summer 2024) · Dean’s List (Spring 2024, Fall 2025)",
           location: "Arizona, USA",
         },
         {
           school: "Universidad Peruana de Ciencias Aplicadas",
           logo: "/logos/upc.png",
-          program: "B.A. International Business Administration",
-          detail: "Graduated · Top 5% of class · International Trade, Global Supply Chain, Corporate Governance",
           period: "2021 — 2026",
+          program: "B.A. International Business Administration",
+          detail: "International Trade, Global Supply Chain, Corporate Governance",
+          honors: "Top 5% of class",
           location: "Lima, Perú",
         },
       ],
-    },
-    contact: {
-      label: "08 — Contact",
-      title1: "Let's build the",
-      titleAccent: "next product",
-      sub: "Open to AI Solutions Engineer, Technical Product Manager and AI-enabled transformation roles — remote or hybrid. If you're bridging enterprise systems and AI, we should talk.",
-      emailCta: "joskuzzz22@gmail.com",
-      linkedinCta: "LinkedIn",
-      githubCta: "GitHub",
-      availability: "Lima, Perú (UTC-5, no DST) — year-round overlap with US Eastern & Central",
-    },
-    footer: {
-      rights: "© 2026 José Leonardo Machado Tabraj. All rights reserved.",
-      built: "Designed & built with Next.js — deployed on Vercel.",
-    },
-  },
-
-  es: {
-    nav: {
-      about: "Perfil",
-      experience: "Experiencia",
-      projects: "Productos",
-      research: "Research",
-      skills: "Capacidades",
-      education: "Educación",
-      certifications: "Certificaciones",
-      contact: "Contacto",
-      homeAria: "José Machado — inicio",
-      menuAria: "Abrir o cerrar menú",
-    },
-    hero: {
-      eyebrow: "José Leonardo Machado Tabraj — AI Solutions Engineer · Lima, Perú",
-      headline1: "Construyo productos con IA que convierten",
-      headlineAccent: "operaciones manuales",
-      headline2: "en resultados medibles.",
-      sub: "AI Solutions Engineer y Product Owner de Transformación Digital. Fundador de la Process Automation Office en Veritas Prime (SAP Gold Partner) — llevando productos a producción en la intersección de SAP, Google Cloud y modelos de lenguaje.",
-      ctaPrimary: "Hablemos",
-      ctaSecondary: "Ver productos",
-      cvCta: "Descargar CV",
-      scroll: "Desliza",
-      stats: [
-        { value: "7+", label: "Productos en producción" },
-        { value: "100%", label: "Adopción — embebida en la metodología corporativa" },
-        { value: "8 · 24", label: "Tools MCP · tests aprobados" },
-        { value: "6h", label: "Ahorradas por usuario/semana" },
-      ],
-    },
-    about: {
-      label: "01 — Perfil",
-      title: "Visión de negocio. Profundidad SAP. Ejecución con IA.",
-      paragraphs: [
-        "Opero en la intersección que a la mayoría de empresas le cuesta cubrir: operaciones de negocio, SAP empresarial e IA aplicada. Formado en negocios — BBA Cum Laude en University of Arizona, top 5% de mi promoción en UPC — y certificado como consultor SAP SuccessFactors, di el salto que la mayoría de analistas nunca da: dejé de escribir requerimientos y empecé a construir los productos yo mismo.",
-        "En Veritas Prime, SAP Gold Partner para LATAM y el Caribe, ese salto me valió un puesto creado específicamente alrededor de lo que había construido. Hoy soy dueño del roadmap interno de herramientas con IA, lidero la Process Automation Office que fundé, y soy Functional Lead de tres productos simultáneos — incluyendo un servidor MCP que conecta modelos de lenguaje con el ecosistema SAP SuccessFactors.",
-        "No entrego especificaciones y cruzo los dedos. Hago discovery con usuarios reales, escribo los criterios de aceptación, construyo o co-construyo el producto, dirijo el ciclo de validación y manejo la gestión del cambio que hace que la adopción funcione — incluyendo dos programas corporativos de alfabetización en IA y el AI Flight Manual de la compañía.",
-      ],
-      facts: [
-        { label: "Ubicación", value: "Lima, Perú — UTC-5, overlap todo el año con US ET/CT" },
-        { label: "Idiomas", value: "Español (nativo) · Inglés (profesional)" },
-        { label: "Enfoque", value: "Soluciones IA · Product ownership · SAP" },
-        { label: "Actualmente", value: "Process Reengineering Analyst @ Veritas Prime" },
-      ],
-    },
-    experience: {
-      label: "02 — Experiencia",
-      title: "Un puesto inventado para lo que construyo.",
-      entries: [
-        {
-          company: "Veritas Prime LATAM & Caribe",
-          logo: "/logos/veritas-prime.png",
-          location: "Lima, Perú",
-          kind: "SAP Gold Partner",
-          roles: [
-            {
-              title: "Process Reengineering Associate Analyst",
-              period: "Feb 2026 — Actualidad",
-              bullets: [
-                "Designado a un puesto de nueva creación después de que mis productos con IA demostraran adopción medible; dueño del roadmap interno de herramientas con IA para las operaciones de Consultoría y AMS.",
-                "Fundé y lidero la Process Automation Office (PAO): definí el proceso de discovery, el framework de priorización y el estándar de documentación AUTO-000; 7+ productos en producción sirviendo a los equipos de delivery de LATAM.",
-                "Functional Lead de tres productos simultáneos bajo la Avengers Initiative — Data Toolkit, servidor MCP para SAP SuccessFactors y automatización de delivery en Smartsheet — con specs funcionales, criterios de aceptación y el ciclo de validación con el equipo de ingeniería de VP Labs.",
-                "Impulsé la adopción con 2 programas corporativos de alfabetización en IA y el Corporate AI Flight Manual; co-diseñé los guardrails de seguridad y clasificación de datos con IT.",
-                "Alojo el stack de automatización de la PAO en Google Cloud Platform y endurezco los entornos Ubuntu que lo sostienen — remediando los hallazgos de los pentests internos recurrentes de IT para cerrar vulnerabilidades antes de que lleguen a producción.",
-              ],
-            },
-            {
-              title: "Prime Associate Project Coordinator",
-              period: "Sept 2025 — Feb 2026",
-              bullets: [
-                "Dueño de la entrega end-to-end del producto Smartsheet Workspace Configuration — un setup automatizado de 17 pasos que ahorra ~2 horas facturables por implementación de cliente.",
-                "Trabajé con Project Managers, consultores y clientes para levantar requerimientos, validar historias de usuario y priorizar el backlog de tooling interno.",
-              ],
-            },
-            {
-              title: "Prime Associate Member",
-              period: "Abr 2025 — Dic 2025",
-              bullets: [
-                "Identifiqué dolores manuales recurrentes mediante investigación con usuarios; lancé MVPs de automatización que recuperaron ~6 horas semanales por usuario.",
-                "Establecí el patrón de plantilla AUTO-000 — adoptado en toda LATAM como estándar de documentación, onboarding y handover de automatizaciones internas.",
-              ],
-            },
-          ],
-        },
-        {
-          company: "KeyStock Perú",
-          monogram: "KS",
-          location: "Lima, Perú",
-          kind: "Emprendimiento",
-          roles: [
-            {
-              title: "Fundador & Proveedor Mayorista B2B",
-              period: "2024 — Actualidad",
-              bullets: [
-                "Validé un segmento desatendido de cerrajeros y talleres automotrices mediante customer discovery; lancé una línea mayorista B2B de carcasas de llaves vehiculares importadas de fabricantes chinos (KEYDIY, Xhorse).",
-                "Definí la estrategia go-to-market — precios, distribución y marca — y ejecuté el análisis de costos de importación bajo la regulación aduanera peruana.",
-                "Hoy opera de forma pasiva — sin conflicto con compromisos a tiempo completo.",
-              ],
-            },
-          ],
-        },
-        {
-          company: "The Focus Club",
-          monogram: "FC",
-          location: "Lima, Perú",
-          kind: "Marca de ropa",
-          roles: [
-            {
-              title: "CEO & Fundador",
-              period: "Jun 2022 — Dic 2023",
-              bullets: [
-                "Logré un margen operativo del 30% con precios estratégicos, curaduría de SKUs y gestión de inventario en dos colecciones de temporada.",
-                "Lideré la operación de producto end-to-end: modelamiento financiero, sourcing de proveedores y estrategia de venta directa al consumidor.",
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    projects: {
-      label: "03 — Productos",
-      title: "Lanzados, adoptados, en producción.",
-      intro:
-        "No son conceptos — son productos operando hoy dentro de una empresa que factura por hora. Cada uno empezó como un dolor manual y terminó como herramienta adoptada. La mayoría del código es propiedad de Veritas Prime; lo que puede ser público vive en GitHub.",
-      codeCta: "Ver código en GitHub",
-      items: [
-        {
-          index: "P—01",
-          title: "Process Automation Office (PAO)",
-          role: "Fundador & Product Lead",
-          description:
-            "Una función de producto interna construida desde cero: proceso de discovery, framework de priorización y el estándar de documentación AUTO-000 — hoy la norma en toda LATAM para documentar, adoptar y transferir automatizaciones. Productos AUTO-006 a AUTO-013 en producción sirviendo a los equipos de delivery; dos de ellos — el aprovisionamiento de workspaces y el procesamiento de transcripciones de Zoom — están embebidos en la metodología corporativa de delivery con 100% de adopción.",
-          metric: "7+",
-          metricLabel: "productos en producción",
-          tags: ["Estrategia de producto", "Gobernanza", "Gestión del cambio"],
-          featured: true,
-        },
-        {
-          index: "P—02",
-          title: "Servidor MCP para SAP SuccessFactors",
-          role: "Visión de producto & build",
-          description:
-            "Un servidor Model Context Protocol en Python que permite a los modelos de lenguaje operar sobre el ecosistema SAP SuccessFactors. Parte del portafolio de la Avengers Initiative.",
-          metric: "8 · 24",
-          metricLabel: "tools · tests aprobados",
-          tags: ["Python", "MCP", "APIs SAP", "LLM"],
-        },
-        {
-          index: "P—03",
-          title: "Smartsheet Workspace Configuration",
-          role: "Dueño end-to-end",
-          description:
-            "Un setup de workspace automatizado de 17 pasos — backend en Google Apps Script, frontend HTML. 100% de adopción: embebido en la metodología corporativa de delivery como paso obligatorio de cada implementación de cliente.",
-          metric: "100%",
-          metricLabel: "adopción · −2h facturables por cliente",
-          tags: ["Apps Script", "API Smartsheet", "HTML"],
-        },
-        {
-          index: "P—04",
-          title: "Skills Analytics System",
-          role: "Líder de migración & dashboards",
-          description:
-            "Migré la data de competencias del equipo de Sheets a Smartsheet y entregué dashboards en React con análisis de puntos únicos de falla (SPOF) y mapas de calor de brechas de habilidades para decisiones ejecutivas de staffing.",
-          metric: "SPOF",
-          metricLabel: "análisis de riesgo ejecutivo",
-          tags: ["React", "Smartsheet", "Analytics"],
-        },
-        {
-          index: "P—05",
-          title: "Data Toolkit — Avengers Initiative",
-          role: "Functional Lead",
-          description:
-            "Tooling de datos para consultores: traduje necesidades de negocio en un backlog funcional priorizado con criterios de aceptación, y validé los entregables de ingeniería antes de cada release.",
-          metric: "1 de 3",
-          metricLabel: "productos simultáneos liderados",
-          tags: ["Product ownership", "Data tooling", "UAT"],
-        },
-        {
-          index: "P—06",
-          title: "Automatización de Onboarding de Clientes",
-          role: "Spec & build",
-          description:
-            "Aprovisiona automáticamente carpetas de Drive, workbooks DNA y espacios de Google Chat para cada nuevo cliente — el setup de onboarding pasó de horas a minutos.",
-          metric: "h → min",
-          metricLabel: "tiempo de setup de onboarding",
-          tags: ["Apps Script", "API Drive", "API Chat"],
-        },
-        {
-          index: "P—07",
-          title: "Test Automation para SuccessFactors",
-          role: "Ingeniero de automatización",
-          description:
-            "Assets de regresión automatizada basados en modelos con Tricentis Tosca para configuraciones de SAP SuccessFactors — menos QA manual y validación de releases más rápida.",
-          metric: "QA",
-          metricLabel: "esfuerzo manual reducido",
-          tags: ["Tricentis Tosca", "SAP", "Test automation"],
-        },
-      ],
-    },
-    research: {
-      label: "04 — Research & Auditorías",
-      title: "Auditar primero. Automatizar después.",
-      intro:
-        "Investigación y análisis detrás de los productos — auditorías de procesos, planes de entrada a mercados e investigación de políticas — porque la automatización correcta empieza por entender la operación real.",
-      cards: [
-        {
-          code: "R—01 · Investigación de mercado & modelo financiero",
-          status: "Concluido · 2026",
-          title: "D'FitoLife Soy — Plan de internacionalización Perú → EE.UU.",
-          description:
-            "Plan integral de internacionalización de un suplemento peruano a base de soya y superalimentos andinos, dirigido al segmento hispano de EE.UU. vía Amazon FBA: matriz de selección de mercados, construcción bottom-up de la demanda (SOM), análisis de costos de importación y aranceles, y un modelo financiero completamente trazable — VAN de USD 31,658, TIR de 49.7% y recuperación en 2.16 años en el escenario conservador, resistente a un arancel del 15%.",
-          tags: ["Investigación de mercado", "Modelado financiero", "Amazon FBA", "Comercio exterior"],
-        },
-        {
-          code: "R—02 · Investigación & framework",
-          status: "En desarrollo",
-          title: "Perú SMB — Auditoría operativa para consultoras",
-          description:
-            "Framework de auditoría de procesos y madurez digital enfocado en PYMEs peruanas: una metodología para que consultoras evalúen operaciones, detecten cuellos de botella y prioricen oportunidades de automatización antes de implementar tecnología. Su primer prototipo funcional es público — un agente de razonamiento con IA que precalifica escrituras de transferencia de propiedad mediante una cadena explícita de verificación legal de 10 pasos, con fuentes citadas y diseño a prueba de fallos: el agente propone, el notario decide.",
-          tags: ["Auditoría de procesos", "PYMEs Perú", "IA agéntica", "Framework"],
-          link: "https://github.com/joskuzzz22/Peru-SMB-Agent-",
-        },
-        {
-          code: "R—03 · Investigación de tesis",
-          status: "En curso",
-          title: "El CBAM europeo — impacto en exportaciones peruanas y andinas",
-          description:
-            "Investigación sobre el Mecanismo de Ajuste en Frontera por Carbono de la UE y el Pacto Verde Europeo: cómo la política climática unilateral europea redefine el acceso a mercados para las economías andinas, y qué respuestas de precios al carbono tienen disponibles el Perú y la Comunidad Andina.",
-          tags: ["Política climática", "CBAM", "Comercio exterior", "Comunidad Andina"],
-        },
-      ],
-    },
-    skills: {
-      label: "05 — Capacidades",
-      title: "Un perfil, cuatro disciplinas.",
-      groups: [
-        {
-          title: "IA & Automatización",
-          items: [
-            "Claude Code",
-            "Model Context Protocol (MCP)",
-            "Pipelines RAG",
-            "Diseño de workflows LLM",
-            "Frameworks de adopción de IA empresarial",
-            "NotebookLM",
-          ],
-        },
-        {
-          title: "Producto & Delivery",
-          items: [
-            "Discovery de producto",
-            "Priorización de backlog",
-            "Definición de roadmap",
-            "Gestión de stakeholders",
-            "Investigación de usuarios",
-            "Alcance de MVPs",
-            "Gestión del cambio",
-            "Coordinación de UAT",
-          ],
-        },
-        {
-          title: "Ingeniería",
-          items: [
-            "Python",
-            "Google Cloud Platform (GCP)",
-            "Google Apps Script (OAuth, Webhooks)",
-            "Ubuntu — hardening y guardrails de seguridad",
-            "React · HTML",
-            "SQL Server",
-            "Power BI",
-            "API de Smartsheet",
-            "Tricentis Tosca",
-            "Excel (avanzado)",
-          ],
-        },
-        {
-          title: "SAP",
-          items: [
-            "SuccessFactors EC Core (consultor certificado)",
-            "Metodología SAP Activate",
-            "Integración de APIs SAP",
-            "S/4HANA MM & WM (usuario experto)",
-          ],
-        },
-      ],
-      keyboard: {
-        hint: "pista: presiona una tecla — o toca un keycap",
-        idle: "Esperando input…",
-        keys: [
-          { k: "C", label: "Claude Code", blurb: "Mi herramienta diaria — ingeniería en pareja con IA detrás de cada producto.", tone: "accent" },
-          { k: "M", label: "MCP", blurb: "Construí un servidor MCP para SAP SuccessFactors — 8 tools, 24 tests aprobados.", tone: "accent" },
-          { k: "S", label: "SuccessFactors", blurb: "Consultor de implementación certificado en EC Core.", tone: "accent" },
-          { k: "P", label: "Python", blurb: "La columna vertebral de mi servidor MCP y mis pipelines de automatización." },
-          { k: "R", label: "React", blurb: "Dashboards con análisis SPOF y mapas de calor de brechas de habilidades.", tone: "mid" },
-          { k: "G", label: "GCP", blurb: "Google Cloud aloja el stack de automatización — donde corren la mayoría de productos de la PAO.", tone: "mid" },
-          { k: "W", label: "Apps Script", blurb: "OAuth, webhooks, Drive/Gmail/Chat/Sheets — automatización en producción.", tone: "mid" },
-          { k: "A", label: "SAP Activate", blurb: "Project manager certificado en la metodología de delivery de SAP." },
-          { k: "L", label: "LLM Workflows", blurb: "Pipelines RAG y diseño de workflows de IA empresarial.", tone: "mid" },
-          { k: "I", label: "APIs SAP", blurb: "Integración en todo el ecosistema SuccessFactors." },
-          { k: "T", label: "Smartsheet", blurb: "Automatización por API para operaciones de delivery a escala." },
-          { k: "B", label: "Power BI", blurb: "Reportería ejecutiva y analytics.", tone: "mid" },
-          { k: "Q", label: "SQL Server", blurb: "Modelado de datos y queries detrás de los dashboards." },
-          { k: "K", label: "Tosca", blurb: "Test automation basada en modelos para configuraciones SAP." },
-          { k: "N", label: "NotebookLM", blurb: "Investigación y síntesis de conocimiento para los equipos." },
-          { k: "O", label: "OAuth", blurb: "Autenticación server-to-server e integraciones con webhooks.", tone: "mid" },
-          { k: "H", label: "Seguridad", blurb: "Entornos Ubuntu endurecidos y guardrails — diseñados para resistir los pentests internos recurrentes de IT." },
-          { k: "D", label: "Discovery", blurb: "Investigación de usuarios que encuentra el dolor que vale automatizar.", tone: "mid" },
-          { k: "U", label: "UAT", blurb: "Ciclos de validación entre consultores e ingeniería." },
-          { k: "E", label: "IA Empresarial", blurb: "Frameworks de adopción, programas de alfabetización y guardrails.", tone: "mid" },
-        ],
-      },
-    },
-    certifications: {
-      label: "07 — Certificaciones",
-      title: "SAP, IA y datos. Certificado.",
       certs: [
         { name: "SAP Certified Associate — SuccessFactors EC Core, Implementation Consultant", issuer: "SAP", year: "2025 · recert. 2026" },
         { name: "SAP Certified Associate — Project Manager, SAP Activate", issuer: "SAP", year: "2025" },
-        { name: "Strategic Transformation with AI", issuer: "Pacífico Business School", year: "2026" },
-        { name: "Cambridge FCE — Inglés (B2 First)", issuer: "Cambridge", year: "2023" },
+        { name: "Cambridge FCE — English (B2 First)", issuer: "Cambridge", year: "2023" },
       ],
-      trainingTitle: "Formación reciente",
       training: [
+        { name: "Strategic Transformation with AI", issuer: "Pacífico Business School", year: "2026" },
         { name: "Claude Code 101 & Claude 101", issuer: "Anthropic", year: "2026" },
         { name: "Claude Code desde Cero", issuer: "Coding Latam", year: "2026" },
-        { name: "Diplomado en Logística y Operaciones", issuer: "ADEX", year: "2024" },
+        { name: "Diploma in Logistics & Operations", issuer: "ADEX", year: "2024" },
         { name: "SAP Logistics MM/WM", issuer: "UNI", year: "2024" },
         { name: "SQL Server & Power BI Bootcamp", issuer: "Cibertec", year: "2024" },
       ],
     },
+    contact: {
+      label: "Contact",
+      title: "Let’s talk about your next product.",
+      sub: "Open to AI Solutions Engineer, Technical Product Manager and AI-enabled transformation roles, remote or hybrid.",
+      avail: "Lima, Perú (UTC−5, no DST) · year-round overlap with US Eastern and Central",
+    },
+    footer: {
+      rights: "© 2026 José Leonardo Machado Tabraj",
+      links: [
+        { label: "Capabilities", href: "#capacidades" },
+        { label: "Education", href: "#formacion" },
+        { label: "Certifications", href: "#certificaciones" },
+        { label: "CV", href: links.cv },
+      ],
+    },
+    detail: { back: "Products" },
+  },
+
+  es: {
+    ui: {
+      homeAria: "José Machado — inicio",
+      navAria: "Navegación principal",
+      langAria: "Idioma",
+      footAria: "Enlaces del pie",
+      menu: "Abrir menú",
+      close: "Cerrar menú",
+      menuLabel: "Menú",
+      myRole: "Mi rol",
+      more: "Ver caso completo",
+      copy: "Copiar correo",
+      copied: "✓ Copiado",
+      copiedStatus: "Correo copiado al portapapeles.",
+    },
+    nav: [
+      { id: "productos", label: "Productos" },
+      { id: "perfil", label: "Perfil" },
+      { id: "experiencia", label: "Experiencia" },
+      { id: "investigacion", label: "Investigación" },
+      { id: "contacto", label: "Contacto" },
+    ],
+    hero: {
+      name: "José Machado",
+      fullName: "José Leonardo Machado Tabraj",
+      role: "AI Solutions Engineer & Digital Transformation Product Owner",
+      title: "Conecto negocio, SAP e IA para crear productos que funcionan.",
+      sub: "AI Solutions Engineer y Product Owner. Fundé la Process Automation Office en Veritas Prime, donde desarrollo y lidero soluciones para automatizar operaciones empresariales.",
+      cta1: "Ver productos",
+      cta2: "Hablemos",
+      cv: "Descargar CV",
+      loc: "Lima, Perú · UTC−5",
+      avail: "Disponible para roles remotos o híbridos",
+      alt: "Retrato de José Leonardo Machado Tabraj",
+      official: "Cargo actual: Process Reengineering Associate Analyst · Veritas Prime",
+    },
+    impact: {
+      label: "Resumen de impacto",
+      note: "Resultados reportados de productos internos de Veritas Prime.",
+      items: [
+        {
+          value: "7+",
+          label: "productos en producción",
+          caption: "Process Automation Office · AUTO-006 a AUTO-013",
+          href: "#pao",
+        },
+        {
+          value: "≈6 h",
+          label: "ahorradas por usuario a la semana",
+          caption: "MVPs de automatización surgidos de investigación con usuarios",
+          href: "#experiencia",
+        },
+        {
+          value: "≈2 h",
+          label: "ahorradas por implementación",
+          caption: "Caso 01 · Smartsheet Workspace Configuration",
+          href: "#caso-01",
+        },
+      ],
+    },
+    products: {
+      label: "Productos",
+      title: "Productos en producción, construidos desde la operación.",
+      intro:
+        "Cada producto empezó como una tarea manual recurrente en los equipos de delivery y terminó como herramienta adoptada.",
+    },
+    pao: {
+      kicker: "Iniciativa · 2025 — actualidad",
+      title: "Process Automation Office",
+      abbr: "PAO",
+      role: "Fundador y Product Lead",
+      body: "Creé una función interna de producto en Veritas Prime que define cómo se detectan, priorizan, documentan y adoptan las automatizaciones. Su estándar AUTO-000 es hoy la norma en LATAM para documentar, incorporar y transferir automatizaciones internas.",
+      steps: [
+        { n: "01", title: "Descubrimiento", text: "Investigación con usuarios para encontrar tareas manuales recurrentes." },
+        { n: "02", title: "Priorización", text: "Framework propio para decidir qué automatizar primero." },
+        { n: "03", title: "Documentación", text: "Estándar AUTO-000 para documentación, onboarding y traspaso." },
+        { n: "04", title: "Adopción", text: "Dos programas de alfabetización en IA y el Corporate AI Flight Manual." },
+      ],
+      stats: [
+        {
+          value: "7+",
+          text: "productos en producción para los equipos de delivery de LATAM (AUTO-006 a AUTO-013).",
+          short: "productos en producción",
+        },
+        {
+          value: "100 %",
+          text: "de adopción en dos procesos incorporados a la metodología corporativa de delivery: el aprovisionamiento de workspaces (Caso 01) y el procesamiento de transcripciones de Zoom.",
+          short: "adopción en 2 procesos de la metodología corporativa",
+        },
+      ],
+    },
+    cases: [
+      {
+        slug: SLUGS.workspace,
+        n: "Caso 01",
+        title: "Smartsheet Workspace Configuration",
+        roleTag: "Responsable end-to-end",
+        rows: [
+          { label: "Problema", value: "La configuración del workspace de Smartsheet para cada implementación de cliente era un proceso manual de 17 pasos." },
+          { label: "Usuarios y contexto", value: "Project Managers y consultores de Veritas Prime en implementaciones de clientes." },
+          { label: "Mi contribución", value: "Responsable de la entrega end-to-end: requerimientos, construcción, validación y adopción." },
+          { label: "Solución", value: "Configuración automatizada de 17 pasos con backend en Google Apps Script, interfaz HTML y la API de Smartsheet." },
+          { label: "Resultado", value: "≈2 horas facturables ahorradas por implementación. 100 % de adopción: es paso obligatorio de cada implementación en la metodología corporativa." },
+          { label: "Tecnologías", value: "Google Apps Script · HTML · API de Smartsheet" },
+        ],
+        rowsShort: [
+          { label: "Mi contribución", value: "Responsable de la entrega end-to-end." },
+          { label: "Resultado", value: "100 % de adopción como paso obligatorio de cada implementación." },
+          { label: "Tecnologías", value: "Google Apps Script · HTML · API de Smartsheet" },
+        ],
+        visual: {
+          kind: "workspace",
+          manual: "Manual",
+          manualDesc: "17 pasos a mano en cada implementación",
+          auto: "Automatizado",
+          autoDesc: "Una ejecución; el script completa los 17 pasos",
+          run: "Configurar workspace",
+          bar: "Apps Script · 1–17",
+          saved: { value: "≈2 h", label: "ahorradas por implementación" },
+          note: "Diagrama basado en la descripción del producto. No representa la duración de cada paso.",
+        },
+        detail: {
+          kicker: "Automatización de delivery",
+          lede: "Configuración automatizada del workspace de Smartsheet para cada implementación de cliente, incorporada a la metodología corporativa de delivery.",
+          meta: [
+            { label: "Mi rol", value: "Responsable end-to-end" },
+            { label: "Periodo", value: "Sept 2025 — Feb 2026" },
+            { label: "Empresa", value: "Veritas Prime" },
+            { label: "Tecnologías", value: "Apps Script · HTML · API de Smartsheet" },
+          ],
+          sections: [
+            { title: "Contexto", text: "Veritas Prime, SAP Gold Partner para LATAM y el Caribe, usa Smartsheet en la entrega de sus implementaciones de clientes." },
+            { title: "Problema", text: "Cada implementación requería configurar a mano un workspace en 17 pasos." },
+            { title: "Mi rol", text: "Responsable de la entrega end-to-end, en coordinación con Project Managers, consultores y clientes." },
+            { title: "Solución", text: "Backend en Google Apps Script e interfaz HTML que ejecutan los 17 pasos mediante la API de Smartsheet." },
+            { title: "Validación y adopción", text: "Incorporado a la metodología corporativa de delivery como paso obligatorio de cada implementación de cliente." },
+            { title: "Resultados", text: "≈2 horas facturables ahorradas por implementación y 100 % de adopción en el proceso." },
+          ],
+          metrics: [
+            { value: "17", label: "pasos automatizados" },
+            { value: "≈2 h", label: "ahorradas por implementación" },
+            { value: "100 %", label: "de adopción en la metodología" },
+          ],
+        },
+      },
+      {
+        slug: SLUGS.mcp,
+        n: "Caso 02",
+        title: "Servidor MCP para SAP SuccessFactors",
+        roleTag: "Visión de producto y construcción",
+        explainer:
+          "MCP (Model Context Protocol) es un estándar abierto que permite a un asistente de IA usar herramientas y datos de otros sistemas de forma controlada.",
+        rows: [
+          { label: "Problema", value: "Los modelos de lenguaje no pueden consultar ni operar por sí solos sobre el ecosistema SAP SuccessFactors." },
+          { label: "Usuarios y contexto", value: "Producto de la Avengers Initiative de Veritas Prime, con el equipo de ingeniería de VP Labs." },
+          { label: "Mi contribución", value: "Visión de producto y construcción. Como Functional Lead: especificaciones funcionales, criterios de aceptación y ciclo de validación." },
+          { label: "Solución", value: "Servidor MCP en Python que expone 8 herramientas para que un modelo de lenguaje trabaje con SAP SuccessFactors mediante sus APIs." },
+          { label: "Resultado", value: "8 herramientas MCP y 24 pruebas aprobadas." },
+          { label: "Tecnologías", value: "Python · MCP · APIs SAP · LLM" },
+        ],
+        visual: {
+          kind: "mcp",
+          nodes: [
+            { title: "Asistente de IA", sub: "Modelo de lenguaje" },
+            { title: "Servidor MCP", sub: "Python · 8 herramientas" },
+            { title: "SAP SuccessFactors", sub: "APIs SAP" },
+          ],
+          stats: [
+            { value: "8", label: "herramientas MCP" },
+            { value: "24", label: "pruebas aprobadas" },
+          ],
+          note: "Diagrama conceptual. Solo incluye componentes documentados en el portafolio.",
+        },
+        detail: {
+          kicker: "Integración de IA empresarial",
+          lede: "Conecta los modelos de lenguaje con el ecosistema SAP SuccessFactors para que un asistente de IA pueda consultarlo y operar sobre él de forma controlada.",
+          meta: [
+            { label: "Mi rol", value: "Visión de producto y construcción" },
+            { label: "Empresa", value: "Veritas Prime" },
+            { label: "Tecnologías", value: "Python · MCP · APIs SAP · LLM" },
+          ],
+          sections: [
+            { title: "Contexto", text: "MCP (Model Context Protocol) es un estándar abierto que permite a un asistente de IA usar herramientas y datos de otros sistemas de forma controlada. Este servidor es un producto de la Avengers Initiative de Veritas Prime, construido con el equipo de ingeniería de VP Labs." },
+            { title: "Problema", text: "Los modelos de lenguaje no pueden consultar ni operar por sí solos sobre el ecosistema SAP SuccessFactors." },
+            { title: "Mi rol", text: "Visión de producto y construcción. Como Functional Lead: especificaciones funcionales, criterios de aceptación y ciclo de validación." },
+            { title: "Solución", text: "Servidor MCP en Python que expone 8 herramientas para que un modelo de lenguaje trabaje con SAP SuccessFactors mediante sus APIs." },
+            { title: "Resultados", text: "8 herramientas MCP y 24 pruebas aprobadas." },
+          ],
+          // The diagram above already shows 8 tools and 24 tests.
+          metrics: [],
+        },
+      },
+      {
+        slug: SLUGS.skills,
+        n: "Caso 03",
+        title: "Skills Analytics System",
+        roleTag: "Líder de migración y dashboards",
+        rows: [
+          { label: "Problema", value: "Los datos de competencias del equipo estaban en Google Sheets, sin una vista para detectar brechas ni dependencias de personas clave." },
+          { label: "Usuarios y contexto", value: "Dirección de Veritas Prime, para decisiones de asignación de equipos." },
+          { label: "Mi contribución", value: "Lideré la migración de los datos a Smartsheet y la entrega de los dashboards." },
+          { label: "Solución", value: "Dashboards en React con mapas de calor de brechas de habilidades y análisis de puntos únicos de falla (SPOF): habilidades que dependen de una sola persona." },
+          { label: "Resultado", value: "Apoyo a las decisiones ejecutivas de asignación de equipos." },
+          { label: "Tecnologías", value: "React · Smartsheet · Analytics" },
+        ],
+        visual: {
+          kind: "heatmap",
+          title: "Mapa de calor de habilidades",
+          tag: "Ilustrativo · datos ficticios",
+          aria: "Mapa de calor ilustrativo con datos ficticios: cinco habilidades por seis personas; Tricentis Tosca depende de una sola persona.",
+          legend: "Nivel 0–3",
+          spof: "una sola persona cubre la habilidad",
+          note: "Visualización conceptual.",
+        },
+        detail: {
+          kicker: "Analítica de talento",
+          lede: "Dashboards que muestran las brechas de habilidades y las dependencias de personas clave del equipo, como apoyo a las decisiones de asignación de la dirección.",
+          meta: [
+            { label: "Mi rol", value: "Líder de migración y dashboards" },
+            { label: "Empresa", value: "Veritas Prime" },
+            { label: "Tecnologías", value: "React · Smartsheet · Analytics" },
+          ],
+          sections: [
+            { title: "Contexto", text: "Construido para la dirección de Veritas Prime, como apoyo a las decisiones de asignación de equipos." },
+            { title: "Problema", text: "Los datos de competencias del equipo estaban en Google Sheets, sin una vista para detectar brechas ni dependencias de personas clave." },
+            { title: "Mi rol", text: "Lideré la migración de los datos a Smartsheet y la entrega de los dashboards." },
+            { title: "Solución", text: "Dashboards en React con mapas de calor de brechas de habilidades y análisis de puntos únicos de falla (SPOF): habilidades que dependen de una sola persona." },
+            { title: "Resultados", text: "Apoyo a las decisiones ejecutivas de asignación de equipos." },
+          ],
+          metrics: [],
+        },
+      },
+    ],
+    others: {
+      title: "Otros productos",
+      ownership: "La mayor parte del código es propiedad de Veritas Prime. Lo público está en",
+      items: [
+        {
+          n: "04",
+          title: "Data Toolkit — Avengers Initiative",
+          role: "Functional Lead",
+          description: "Herramientas de datos para consultores: backlog funcional priorizado con criterios de aceptación y validación de cada entrega de ingeniería.",
+          tech: "Product ownership · UAT",
+        },
+        {
+          n: "05",
+          title: "Automatización de onboarding de clientes",
+          role: "Especificación y construcción",
+          description: "Crea carpetas de Drive, workbooks DNA y espacios de Google Chat para cada nuevo cliente. El setup pasó de horas a minutos.",
+          tech: "Apps Script · API Drive · API Chat",
+        },
+        {
+          n: "06",
+          title: "Automatización de pruebas para SuccessFactors",
+          role: "Ingeniero de automatización",
+          description: "Pruebas de regresión basadas en modelos con Tricentis Tosca para configuraciones de SAP SuccessFactors.",
+          tech: "Tricentis Tosca · SAP",
+        },
+      ],
+    },
+    profile: {
+      label: "Perfil",
+      title: "Criterio de negocio, experiencia SAP y construcción con IA.",
+      paragraphs: [
+        "Me formé en negocios —BBA Cum Laude en la University of Arizona y top 5 % de mi promoción en la UPC— y me certifiqué como consultor SAP SuccessFactors. Con esa base paso de definir requerimientos a construir los productos: investigo con usuarios, escribo los criterios de aceptación y construyo o coconstruyo la solución.",
+        "En Veritas Prime, SAP Gold Partner para LATAM y el Caribe, fundé y lidero la Process Automation Office y soy responsable del roadmap interno de herramientas con IA. Acompaño la adopción con dos programas corporativos de alfabetización en IA y el AI Flight Manual de la compañía.",
+      ],
+      facts: [
+        { label: "Ubicación", value: "Lima, Perú · UTC−5, sin horario de verano" },
+        { label: "Idiomas", value: "Español (nativo) · Inglés (profesional)" },
+        { label: "Cargo actual", value: "Process Reengineering Associate Analyst, Veritas Prime" },
+      ],
+      workTitle: "Forma de trabajo",
+      steps: [
+        { n: "01", title: "Entender el proceso", text: "Investigación con usuarios reales." },
+        { n: "02", title: "Priorizar", text: "Qué automatizar primero y por qué." },
+        { n: "03", title: "Construir", text: "Construyo o coconstruyo con ingeniería." },
+        { n: "04", title: "Validar", text: "Criterios de aceptación y UAT." },
+        { n: "05", title: "Acompañar la adopción", text: "Documentación AUTO-000 y formación." },
+      ],
+    },
+    experience: {
+      label: "Experiencia",
+      title: "Una progresión dentro de Veritas Prime.",
+      company: "Veritas Prime LATAM & Caribe",
+      kind: "SAP Gold Partner · Lima, Perú",
+      logo: "/logos/veritas-prime.png",
+      roles: [
+        {
+          title: "Process Reengineering Associate Analyst",
+          period: "Feb 2026 — actualidad",
+          tag: "Puesto de nueva creación",
+          summary: "Creado a partir de productos con IA que ya habían demostrado adopción medible.",
+          bullets: [
+            "Responsable del roadmap interno de herramientas con IA para Consultoría y AMS.",
+            "Fundé y lidero la Process Automation Office: 7+ productos en producción.",
+            "Functional Lead de tres productos de la Avengers Initiative con el equipo de VP Labs.",
+          ],
+          links: [
+            { label: "PAO", href: "#pao" },
+            { label: "Caso 02", href: "#caso-02" },
+          ],
+        },
+        {
+          title: "Prime Associate Project Coordinator",
+          period: "Sept 2025 — Feb 2026",
+          tag: "Coordinación",
+          summary: "Herramientas internas junto a Project Managers, consultores y clientes.",
+          bullets: [
+            "Entrega end-to-end de Smartsheet Workspace Configuration.",
+            "Requerimientos, validación de historias de usuario y priorización del backlog.",
+          ],
+          links: [{ label: "Caso 01", href: "#caso-01" }],
+        },
+        {
+          title: "Prime Associate Member",
+          period: "Abr 2025 — Dic 2025",
+          tag: "Inicio",
+          summary: "Investigación con usuarios para encontrar tareas manuales recurrentes.",
+          bullets: [
+            "MVPs de automatización que recuperaron ≈6 horas semanales por usuario.",
+            "Creé el patrón AUTO-000, adoptado en LATAM como estándar de documentación.",
+          ],
+          links: [{ label: "PAO", href: "#pao" }],
+        },
+      ],
+      venturesTitle: "Emprendimientos",
+      ventures: [
+        {
+          company: "KeyStock Perú",
+          role: "Fundador y proveedor mayorista B2B",
+          period: "2024 — actualidad",
+          description: "Validé un segmento desatendido de cerrajeros y talleres, y definí precios, distribución y costos de importación. Hoy opera de forma pasiva.",
+        },
+        {
+          company: "The Focus Club",
+          role: "CEO y fundador · marca de ropa",
+          period: "Jun 2022 — Dic 2023",
+          description: "Margen operativo del 30 % en dos colecciones, con modelamiento financiero, sourcing de proveedores y venta directa.",
+        },
+      ],
+    },
+    capabilities: {
+      label: "Capacidades",
+      title: "Cuatro áreas aplicadas en proyectos reales.",
+      usedLabel: "Aplicado en",
+      groups: [
+        {
+          title: "IA y automatización",
+          description: "Diseño flujos con modelos de lenguaje y conecto asistentes de IA con sistemas empresariales.",
+          tools: "Claude Code · MCP · Pipelines RAG · Workflows LLM · NotebookLM",
+          used: "Caso 02",
+          href: "#caso-02",
+        },
+        {
+          title: "Producto y entrega",
+          description: "Descubro necesidades, priorizo el backlog y acompaño la adopción hasta que el producto se usa.",
+          tools: "Discovery · Priorización · Roadmap · MVP · UAT · Gestión del cambio",
+          used: "PAO",
+          href: "#pao",
+        },
+        {
+          title: "Ingeniería",
+          description: "Construyo automatizaciones, integraciones y dashboards, y los opero en Google Cloud.",
+          tools: "Python · Apps Script · React · GCP · SQL Server · Power BI · API de Smartsheet · Tosca · Ubuntu",
+          used: "Casos 01 y 03",
+          href: "#caso-01",
+        },
+        {
+          title: "SAP",
+          description: "Consultor certificado en SuccessFactors EC Core y en la metodología SAP Activate.",
+          tools: "SuccessFactors EC Core · SAP Activate · APIs SAP · S/4HANA MM y WM",
+          used: "Caso 02",
+          href: "#caso-02",
+        },
+      ],
+      keyboard: {
+        title: "Teclado de tecnologías",
+        hint: "Detalle opcional. Pulsa una tecla para ver dónde la he aplicado.",
+        idle: "Selecciona una tecla.",
+        keys: [
+          { k: "C", label: "Claude Code", blurb: "Herramienta diaria de ingeniería en pareja con IA detrás de cada producto." },
+          { k: "M", label: "MCP", blurb: "Servidor MCP para SAP SuccessFactors: 8 herramientas, 24 pruebas aprobadas. → Caso 02" },
+          { k: "S", label: "Success\u00ADFactors", blurb: "Consultor de implementación certificado en EC Core." },
+          { k: "P", label: "Python", blurb: "Base del servidor MCP y de los pipelines de automatización." },
+          { k: "R", label: "React", blurb: "Dashboards de brechas de habilidades y SPOF. → Caso 03" },
+          { k: "G", label: "GCP", blurb: "Google Cloud aloja el stack de automatización de la PAO." },
+          { k: "W", label: "Apps Script", blurb: "OAuth, webhooks y APIs de Google Workspace. → Caso 01" },
+          { k: "T", label: "Smartsheet", blurb: "Automatización por API para la operación de delivery. → Caso 01" },
+          { k: "K", label: "Tosca", blurb: "Pruebas automatizadas basadas en modelos para configuraciones SAP." },
+          { k: "H", label: "Seguridad", blurb: "Entornos Ubuntu endurecidos frente a los pentests internos de IT." },
+        ],
+      },
+    },
+    research: {
+      label: "Investigación",
+      title: "Auditar primero, automatizar después.",
+      intro:
+        "Auditorías de procesos, planes de entrada a mercados e investigación de políticas: la automatización correcta empieza por entender la operación real.",
+      status: { done: "Concluido · 2026", dev: "En desarrollo", prog: "En curso" },
+      items: [
+        {
+          code: "R—01",
+          status: "done",
+          type: "Investigación de mercado y modelo financiero",
+          title: "D’FitoLife Soy — Plan de internacionalización Perú → EE. UU.",
+          description: "Plan para llevar un suplemento peruano de soya y superalimentos andinos al segmento hispano de EE. UU. vía Amazon FBA: selección de mercados, demanda bottom-up, costos de importación y aranceles.",
+          projection: {
+            label: "Resultados proyectados · escenario conservador",
+            rows: [
+              { label: "VAN", value: "USD 31,658" },
+              { label: "TIR", value: "49.7 %" },
+              { label: "Recuperación", value: "2.16 años" },
+            ],
+            note: "Proyección de un modelo financiero, con prueba de estrés ante un arancel del 15 % en EE. UU. No corresponde a una empresa en operación.",
+          },
+        },
+        {
+          code: "R—02",
+          status: "dev",
+          type: "Investigación y marco de auditoría",
+          title: "Perú SMB — Auditoría operativa para consultoras",
+          description: "Marco de auditoría de procesos y madurez digital para que consultoras evalúen operaciones de pymes peruanas y prioricen qué automatizar antes de implementar tecnología.",
+          related: {
+            text: "Primer prototipo público del marco: un agente de IA que precalifica escrituras de transferencia de propiedad con una verificación legal de 10 pasos y fuentes citadas. El agente propone; el notario decide.",
+            linkLabel: "Ver prototipo en GitHub",
+            href: PERU_SMB_REPO,
+          },
+        },
+        {
+          code: "R—03",
+          status: "prog",
+          type: "Investigación de tesis",
+          title: "El CBAM europeo y las exportaciones peruanas y andinas",
+          description: "El CBAM (Mecanismo de Ajuste en Frontera por Carbono) pone precio al carbono de ciertas importaciones a la UE. La investigación analiza cómo cambia el acceso al mercado europeo para las economías andinas y qué respuestas tienen el Perú y la Comunidad Andina.",
+        },
+      ],
+    },
     education: {
-      label: "06 — Educación",
-      title: "Dos continentes, una disciplina.",
+      label: "Formación",
+      title: "Formación en negocios, certificación en SAP.",
+      eduTitle: "Educación",
+      certTitle: "Certificaciones",
+      trainTitle: "Cursos y formación complementaria",
       schools: [
         {
           school: "University of Arizona",
           logo: "/logos/arizona.png",
-          program: "Eller College of Management — B.B.A.",
-          detail: "Doble grado con UPC · Graduado Cum Laude · GPA 3.55/4.00 · Dean's List with Distinction (verano 2024) · Dean's List (primavera 2024, otoño 2025)",
           period: "2023 — 2025",
+          program: "Eller College of Management — B.B.A.",
+          detail: "Doble grado con UPC · GPA 3.55/4.00",
+          honors: "Cum Laude · Dean’s List with Distinction (verano 2024) · Dean’s List (primavera 2024, otoño 2025)",
           location: "Arizona, EE. UU.",
         },
         {
           school: "Universidad Peruana de Ciencias Aplicadas",
           logo: "/logos/upc.png",
-          program: "Administración y Negocios Internacionales",
-          detail: "Graduado · Top 5% de la promoción · Comercio Internacional, Supply Chain Global, Gobierno Corporativo",
           period: "2021 — 2026",
+          program: "Administración y Negocios Internacionales",
+          detail: "Comercio Internacional, Supply Chain Global, Gobierno Corporativo",
+          honors: "Top 5 % de la promoción",
           location: "Lima, Perú",
         },
       ],
+      certs: [
+        { name: "SAP Certified Associate — SuccessFactors EC Core, Implementation Consultant", issuer: "SAP", year: "2025 · recert. 2026" },
+        { name: "SAP Certified Associate — Project Manager, SAP Activate", issuer: "SAP", year: "2025" },
+        { name: "Cambridge FCE — Inglés (B2 First)", issuer: "Cambridge", year: "2023" },
+      ],
+      training: [
+        { name: "Strategic Transformation with AI", issuer: "Pacífico Business School", year: "2026" },
+        { name: "Claude Code 101 y Claude 101", issuer: "Anthropic", year: "2026" },
+        { name: "Claude Code desde Cero", issuer: "Coding Latam", year: "2026" },
+        { name: "Diplomado en Logística y Operaciones", issuer: "ADEX", year: "2024" },
+        { name: "SAP Logistics MM/WM", issuer: "UNI", year: "2024" },
+        { name: "SQL Server y Power BI Bootcamp", issuer: "Cibertec", year: "2024" },
+      ],
     },
     contact: {
-      label: "08 — Contacto",
-      title1: "Construyamos el",
-      titleAccent: "próximo producto",
-      sub: "Abierto a roles de AI Solutions Engineer, Technical Product Manager y transformación con IA — remoto o híbrido. Si estás conectando sistemas empresariales con IA, hablemos.",
-      emailCta: "joskuzzz22@gmail.com",
-      linkedinCta: "LinkedIn",
-      githubCta: "GitHub",
-      availability: "Lima, Perú (UTC-5, sin horario de verano) — overlap todo el año con US Eastern y Central",
+      label: "Contacto",
+      title: "Hablemos de tu próximo producto.",
+      sub: "Abierto a roles de AI Solutions Engineer, Technical Product Manager y transformación con IA, en remoto o híbrido.",
+      avail: "Lima, Perú (UTC−5, sin horario de verano) · coincidencia horaria todo el año con US Eastern y Central",
     },
     footer: {
-      rights: "© 2026 José Leonardo Machado Tabraj. Todos los derechos reservados.",
-      built: "Diseñado y construido con Next.js — desplegado en Vercel.",
+      rights: "© 2026 José Leonardo Machado Tabraj",
+      links: [
+        { label: "Capacidades", href: "#capacidades" },
+        { label: "Formación", href: "#formacion" },
+        { label: "Certificaciones", href: "#certificaciones" },
+        { label: "CV", href: links.cv },
+      ],
     },
+    detail: { back: "Productos" },
   },
 };

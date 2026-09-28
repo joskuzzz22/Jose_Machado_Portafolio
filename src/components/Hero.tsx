@@ -1,97 +1,81 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
 import { useLanguage } from "@/lib/language";
+import { links } from "@/lib/content";
+import { Container } from "./ui";
 
 export default function Hero() {
   const { t } = useLanguage();
-  const reduce = useReducedMotion();
-
-  const fade = (delay: number) => ({
-    initial: { opacity: 0, y: reduce ? 0 : 26 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.7, delay, ease: [0.21, 0.47, 0.32, 0.98] as const },
-  });
 
   return (
-    <section
-      id="top"
-      className="relative flex min-h-svh items-center pt-[130px] pb-[90px]"
-    >
-      <div className="mx-auto flex w-full max-w-[1040px] flex-wrap items-center gap-14 px-6">
-        <div className="min-w-0 flex-[1_1_520px]">
-          <motion.p
-            {...fade(0.05)}
-            className="text-[0.85rem] font-semibold text-ink"
-          >
-            {t.hero.eyebrow}
-          </motion.p>
-
-          <motion.h1
-            {...fade(0.16)}
-            className="type-display mt-7 text-[clamp(2.5rem,5.2vw,4.4rem)] leading-[1.06]"
-          >
-            {t.hero.headline1}{" "}
-            <em className="not-italic text-muted">{t.hero.headlineAccent}</em>{" "}
-            {t.hero.headline2}
-          </motion.h1>
-
-          <motion.p
-            {...fade(0.28)}
-            className="mt-7 max-w-[600px] text-[1.05rem] leading-[1.7] text-muted"
-          >
+    <section id="inicio">
+      <Container className="pt-8 md:grid md:grid-cols-12 md:items-end md:gap-x-6 md:pt-16 md:pb-14 lg:pt-20 lg:pb-[72px]">
+        <div className="md:col-span-8 lg:col-span-7">
+          <p className="text-[15px] font-semibold tracking-[-0.01em] lg:text-[17px]">
+            {t.hero.name}
+          </p>
+          <p className="mt-0.5 text-[13px] leading-[1.4] text-muted lg:mt-1 lg:text-[15px]">
+            {t.hero.role}
+          </p>
+          <h1 className="mt-5 text-[38px] leading-[1.07] font-bold tracking-[-0.03em] text-balance md:text-[48px] md:leading-[1.05] lg:mt-8 lg:text-[56px] lg:leading-[1.04] lg:tracking-[-0.035em] xl:text-[64px]">
+            {t.hero.title}
+          </h1>
+          <p className="mt-4 text-[16px] leading-[1.55] text-pretty text-body md:max-w-[600px] lg:mt-7 lg:text-[18px] lg:leading-[1.6]">
             {t.hero.sub}
-          </motion.p>
+          </p>
 
-          <motion.div {...fade(0.4)} className="mt-10 flex flex-wrap gap-3.5">
+          <div className="mt-6 grid grid-cols-2 gap-2 md:flex md:flex-wrap md:items-center md:gap-3 lg:mt-9">
             <a
-              href="#contact"
-              className="group inline-flex items-center gap-2.5 rounded-full bg-ink px-7 py-3.5 text-[0.95rem] font-medium text-white transition-all hover:opacity-85 active:scale-[0.98]"
+              href="#productos"
+              className="col-span-2 flex h-12 items-center justify-between gap-6 bg-ink px-[18px] text-[15px] font-semibold text-white transition-colors duration-[180ms] hover:bg-body active:translate-y-px active:bg-black md:min-w-[180px] md:px-[22px]"
             >
-              {t.hero.ctaPrimary}
-              <span className="transition-transform group-hover:translate-x-0.5">
-                →
-              </span>
+              {t.hero.cta1}
+              <span aria-hidden="true">→</span>
             </a>
             <a
-              href="#projects"
-              className="inline-flex items-center rounded-full border border-faint px-[26px] py-[13px] text-[0.95rem] font-medium text-ink transition-all hover:border-ink hover:bg-black/[0.03] active:scale-[0.98]"
+              href="#contacto"
+              className="flex h-12 items-center border border-ink px-4 text-[15px] font-semibold transition-colors duration-[180ms] hover:bg-surface active:bg-line md:px-[22px]"
             >
-              {t.hero.ctaSecondary}
+              {t.hero.cta2}
             </a>
             <a
-              href="/Jose-Machado-CV.pdf"
-              download="Jose-Machado-CV.pdf"
-              className="inline-flex items-center gap-2 px-2 py-[13px] text-[0.95rem] font-medium text-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
+              href={links.cv}
+              download={links.cvFile}
+              className="flex h-12 items-center gap-1.5 px-1 text-[15px] font-medium text-body underline decoration-linestrong underline-offset-[5px] transition-colors duration-[180ms] hover:text-ink hover:decoration-ink active:text-black md:px-2.5"
             >
-              {t.hero.cvCta} ↓
+              {t.hero.cv}
+              <span aria-hidden="true">↓</span>
             </a>
-          </motion.div>
+          </div>
+
+          <div className="mt-10 hidden gap-8 border-t border-line pt-4 text-[14px] text-muted md:flex">
+            <span>{t.hero.loc}</span>
+            <span>{t.hero.avail}</span>
+          </div>
         </div>
 
-        <motion.div {...fade(0.24)} className="mx-auto flex-[0_1_380px]">
+        <figure className="mt-6 grid grid-cols-[88px_minmax(0,1fr)] items-center gap-3.5 border-t border-line pt-4 md:col-span-4 md:col-start-9 md:mt-0 md:block md:border-t-0 md:pt-0">
           <Image
             src="/jose-machado.png"
-            alt="José Leonardo Machado Tabraj"
-            width={800}
-            height={1000}
+            alt={t.hero.alt}
+            width={1254}
+            height={1254}
             priority
-            className="block aspect-[4/5] w-full max-w-[400px] rounded-[18px] border border-black/5 object-cover object-[50%_15%]"
+            sizes="(min-width: 1024px) 384px, (min-width: 768px) 30vw, 88px"
+            className="h-[110px] w-[88px] bg-surface object-cover object-[50%_15%] md:aspect-[4/5] md:h-auto md:w-full"
           />
-        </motion.div>
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.3, duration: 1 }}
-        className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 md:block"
-      >
-        <p className="animate-pulse text-[0.7rem] tracking-[0.08em] text-faint">
-          {t.hero.scroll} ↓
-        </p>
-      </motion.div>
+          <figcaption className="text-[13px] leading-[1.5] text-muted md:mt-3 md:grid md:gap-0.5 md:leading-[1.45]">
+            <span className="block font-semibold text-ink">{t.hero.fullName}</span>
+            <span className="mt-0.5 block md:mt-0">{t.hero.official}</span>
+            <span className="mt-1.5 block md:hidden">
+              {t.hero.loc}
+              <br />
+              {t.hero.avail}
+            </span>
+          </figcaption>
+        </figure>
+      </Container>
     </section>
   );
 }
