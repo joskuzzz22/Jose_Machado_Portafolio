@@ -527,7 +527,7 @@ export const content: Record<Lang, Content> = {
       label: "Profile",
       title: "Business judgment, SAP depth and building with AI.",
       paragraphs: [
-        "I trained in business—BBA Cum Laude at the University of Arizona and top 5% of my class at UPC—and certified as an SAP SuccessFactors consultant. From there I moved from writing requirements to building the products: I research with users, write the acceptance criteria and build or co-build the solution.",
+        "I trained in business—BSBA Cum Laude at the University of Arizona and top 20% of my class at UPC—and certified as an SAP SuccessFactors consultant. From there I moved from writing requirements to building the products: I research with users, write the acceptance criteria and build or co-build the solution.",
         "At Veritas Prime, an SAP Gold Partner for LATAM and the Caribbean, I founded and lead the Process Automation Office and own the internal roadmap for AI-enabled tools. I support adoption through two corporate AI literacy programs and the company’s AI Flight Manual.",
       ],
       facts: [
@@ -712,7 +712,7 @@ export const content: Record<Lang, Content> = {
           school: "University of Arizona",
           logo: "/logos/arizona.png",
           period: "2023 — 2025",
-          program: "Eller College of Management — B.B.A.",
+          program: "Eller College of Management — B.S.B.A.",
           detail: "Dual degree with UPC · GPA 3.55/4.00",
           honors: "Cum Laude · Dean’s List with Distinction (Summer 2024) · Dean’s List (Spring 2024, Fall 2025)",
           location: "Arizona, USA",
@@ -723,7 +723,7 @@ export const content: Record<Lang, Content> = {
           period: "2021 — 2026",
           program: "B.A. International Business Administration",
           detail: "International Trade, Global Supply Chain, Corporate Governance",
-          honors: "Top 5% of class",
+          honors: "Top 20% of class",
           location: "Lima, Perú",
         },
       ],
@@ -1023,7 +1023,7 @@ export const content: Record<Lang, Content> = {
       label: "Perfil",
       title: "Criterio de negocio, experiencia SAP y construcción con IA.",
       paragraphs: [
-        "Me formé en negocios —BBA Cum Laude en la University of Arizona y top 5 % de mi promoción en la UPC— y me certifiqué como consultor SAP SuccessFactors. Con esa base paso de definir requerimientos a construir los productos: investigo con usuarios, escribo los criterios de aceptación y construyo o coconstruyo la solución.",
+        "Me formé en negocios —BSBA Cum Laude en la University of Arizona y top 20 % de mi promoción en la UPC— y me certifiqué como consultor SAP SuccessFactors. Con esa base paso de definir requerimientos a construir los productos: investigo con usuarios, escribo los criterios de aceptación y construyo o coconstruyo la solución.",
         "En Veritas Prime, SAP Gold Partner para LATAM y el Caribe, fundé y lidero la Process Automation Office y soy responsable del roadmap interno de herramientas con IA. Acompaño la adopción con dos programas corporativos de alfabetización en IA y el AI Flight Manual de la compañía.",
       ],
       facts: [
@@ -1208,7 +1208,7 @@ export const content: Record<Lang, Content> = {
           school: "University of Arizona",
           logo: "/logos/arizona.png",
           period: "2023 — 2025",
-          program: "Eller College of Management — B.B.A.",
+          program: "Eller College of Management — B.S.B.A.",
           detail: "Doble grado con UPC · GPA 3.55/4.00",
           honors: "Cum Laude · Dean’s List with Distinction (verano 2024) · Dean’s List (primavera 2024, otoño 2025)",
           location: "Arizona, EE. UU.",
@@ -1219,7 +1219,7 @@ export const content: Record<Lang, Content> = {
           period: "2021 — 2026",
           program: "Administración y Negocios Internacionales",
           detail: "Comercio Internacional, Supply Chain Global, Gobierno Corporativo",
-          honors: "Top 5 % de la promoción",
+          honors: "Top 20 % de la promoción",
           location: "Lima, Perú",
         },
       ],
