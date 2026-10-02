@@ -31,9 +31,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "José Machado — AI Solutions Engineer & Product Owner",
     description:
-      "AI-powered products in production: MCP server for SAP SuccessFactors, process automation, analytics dashboards. Lima, Perú — remote-ready.",
+      "I connect business, SAP and AI to build products that work. Founder of the Process Automation Office at Veritas Prime. Lima, Perú — open to remote roles.",
     type: "website",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({
