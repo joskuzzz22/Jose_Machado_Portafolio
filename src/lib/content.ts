@@ -183,7 +183,7 @@ export const content: Record<Lang, Content> = {
       label: "01 — About",
       title: "Business fluency. SAP depth. AI execution.",
       paragraphs: [
-        "I operate at the intersection most companies struggle to bridge: business operations, enterprise SAP, and applied AI. Trained in business — BBA Cum Laude at the University of Arizona, top 5% of my class at UPC — and certified as an SAP SuccessFactors consultant, I made the leap that most analysts never make: I stopped writing requirements and started shipping the products myself.",
+        "I operate at the intersection most companies struggle to bridge: business operations, enterprise SAP, and applied AI. Trained in business — BSBA Cum Laude at the University of Arizona, top 20% of my class at UPC — and certified as an SAP SuccessFactors consultant, I made the leap that most analysts never make: I stopped writing requirements and started shipping the products myself.",
         "At Veritas Prime, an SAP Gold Partner serving LATAM & the Caribbean, that leap earned me a role created specifically around what I had built. Today I own the internal product roadmap for AI-enabled tooling, lead the Process Automation Office I founded, and serve as Functional Lead on three concurrent products — including an MCP server that connects large language models to the SAP SuccessFactors ecosystem.",
         "I don't hand off specs and hope. I do discovery with real users, write the acceptance criteria, build or co-build the product, run the validation loop, and drive the change management that makes adoption stick — including two corporate AI literacy programs and the company's AI Flight Manual.",
       ],
@@ -486,7 +486,7 @@ export const content: Record<Lang, Content> = {
         {
           school: "University of Arizona",
           logo: "/logos/arizona.png",
-          program: "Eller College of Management — B.B.A.",
+          program: "Eller College of Management — B.S.B.A.",
           detail: "Dual-degree program with UPC · Graduated Cum Laude · GPA 3.55/4.00 · Dean's List with Distinction (Summer 2024) · Dean's List (Spring 2024, Fall 2025)",
           period: "2023 — 2025",
           location: "Arizona, USA",
@@ -495,7 +495,7 @@ export const content: Record<Lang, Content> = {
           school: "Universidad Peruana de Ciencias Aplicadas",
           logo: "/logos/upc.png",
           program: "B.A. International Business Administration",
-          detail: "Graduated · Top 5% of class · International Trade, Global Supply Chain, Corporate Governance",
+          detail: "Graduated · Top 20% of class · International Trade, Global Supply Chain, Corporate Governance",
           period: "2021 — 2026",
           location: "Lima, Perú",
         },
@@ -551,7 +551,7 @@ export const content: Record<Lang, Content> = {
       label: "01 — Perfil",
       title: "Visión de negocio. Profundidad SAP. Ejecución con IA.",
       paragraphs: [
-        "Opero en la intersección que a la mayoría de empresas le cuesta cubrir: operaciones de negocio, SAP empresarial e IA aplicada. Formado en negocios — BBA Cum Laude en University of Arizona, top 5% de mi promoción en UPC — y certificado como consultor SAP SuccessFactors, di el salto que la mayoría de analistas nunca da: dejé de escribir requerimientos y empecé a construir los productos yo mismo.",
+        "Opero en la intersección que a la mayoría de empresas le cuesta cubrir: operaciones de negocio, SAP empresarial e IA aplicada. Formado en negocios — BSBA Cum Laude en University of Arizona, top 20% de mi promoción en UPC — y certificado como consultor SAP SuccessFactors, di el salto que la mayoría de analistas nunca da: dejé de escribir requerimientos y empecé a construir los productos yo mismo.",
         "En Veritas Prime, SAP Gold Partner para LATAM y el Caribe, ese salto me valió un puesto creado específicamente alrededor de lo que había construido. Hoy soy dueño del roadmap interno de herramientas con IA, lidero la Process Automation Office que fundé, y soy Functional Lead de tres productos simultáneos — incluyendo un servidor MCP que conecta modelos de lenguaje con el ecosistema SAP SuccessFactors.",
         "No entrego especificaciones y cruzo los dedos. Hago discovery con usuarios reales, escribo los criterios de aceptación, construyo o co-construyo el producto, dirijo el ciclo de validación y manejo la gestión del cambio que hace que la adopción funcione — incluyendo dos programas corporativos de alfabetización en IA y el AI Flight Manual de la compañía.",
       ],
@@ -854,7 +854,7 @@ export const content: Record<Lang, Content> = {
         {
           school: "University of Arizona",
           logo: "/logos/arizona.png",
-          program: "Eller College of Management — B.B.A.",
+          program: "Eller College of Management — B.S.B.A.",
           detail: "Doble grado con UPC · Graduado Cum Laude · GPA 3.55/4.00 · Dean's List with Distinction (verano 2024) · Dean's List (primavera 2024, otoño 2025)",
           period: "2023 — 2025",
           location: "Arizona, EE. UU.",
@@ -863,7 +863,7 @@ export const content: Record<Lang, Content> = {
           school: "Universidad Peruana de Ciencias Aplicadas",
           logo: "/logos/upc.png",
           program: "Administración y Negocios Internacionales",
-          detail: "Graduado · Top 5% de la promoción · Comercio Internacional, Supply Chain Global, Gobierno Corporativo",
+          detail: "Graduado · Top 20% de la promoción · Comercio Internacional, Supply Chain Global, Gobierno Corporativo",
           period: "2021 — 2026",
           location: "Lima, Perú",
         },
